@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import type { Photo } from "./content";
 import { useNearViewport } from "./useNearViewport";
+import { useFlightStream } from "./useFlightStream";
 
 /** Native controls stay available if autoplay is blocked or motion is reduced. */
 export function FlightVideo({ photo, suspended = false }: { photo: Photo; suspended?: boolean }) {
@@ -10,9 +11,15 @@ export function FlightVideo({ photo, suspended = false }: { photo: Photo; suspen
   const [failed, setFailed] = useState(false);
   const [mobile] = useState(() => window.matchMedia("(max-width: 767px)").matches);
   const [visible, setVisible] = useState(() => typeof IntersectionObserver === "undefined");
+  const [nativeHls] = useState(() => typeof MediaSource === "undefined" && Boolean(document.createElement("video").canPlayType("application/vnd.apple.mpegurl")));
+  const [fallback, setFallback] = useState(false);
+  const fallbackToFile = useCallback(() => setFallback(true), []);
   const near = useNearViewport(ref, "400px");
   // Choose once: resizing must not fetch a second copy or reset playback.
   const source = near ? (mobile ? photo.mobileSrc || photo.src : photo.src) : undefined;
+  const playlist = mobile ? photo.mobileHlsSrc || photo.hlsSrc : photo.hlsSrc;
+  const streaming = Boolean(playlist && !fallback && (nativeHls || typeof MediaSource !== "undefined"));
+  useFlightStream(ref, playlist, near && streaming, nativeHls, visible, reduced, suspended, fallbackToFile);
 
   useEffect(() => {
     const video = ref.current;
@@ -23,7 +30,7 @@ export function FlightVideo({ photo, suspended = false }: { photo: Photo; suspen
       }, { threshold: 0.1 });
     if (observer) observer.observe(video);
     return () => observer?.disconnect();
-  }, []);
+  }, [streaming]);
 
   useEffect(() => {
     const video = ref.current;
@@ -43,12 +50,13 @@ export function FlightVideo({ photo, suspended = false }: { photo: Photo; suspen
       video.removeEventListener("loadeddata", update);
       video.pause();
     };
-  }, [source, visible, reduced, suspended]);
+  }, [source, visible, reduced, suspended, streaming]);
 
   return <div className="v2-flight-media" style={{ aspectRatio: `${photo.width || 16} / ${photo.height || 9}` }}>
     <video
+      key={streaming ? "stream" : "file"}
       ref={ref}
-      src={source}
+      src={streaming ? undefined : source}
       poster={near ? photo.poster : undefined}
       width={photo.width}
       height={photo.height}
@@ -59,7 +67,7 @@ export function FlightVideo({ photo, suspended = false }: { photo: Photo; suspen
       playsInline
       controls
       preload={source ? "metadata" : "none"}
-      onError={() => setFailed(true)}
+      onError={() => { if (streaming) fallbackToFile(); else setFailed(true); }}
     >
       {photo.captions && <track kind="captions" src={photo.captions} srcLang="zh" label="中文字幕" default />}
       你的浏览器暂不支持视频播放。

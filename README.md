@@ -13,7 +13,7 @@ npm run dev
 
 当前主站入口为 `src/portfolio/PortfolioPage.tsx`，个人信息、项目和外部链接在 `src/portfolio/content.ts`。相册、照片隧道和背景照片使用同目录的 JSON 清单；媒体位于 `public/media/`。`src/content/profile.ts` 等文件属于历史版本，不是当前主站内容入口。
 
-三段视频使用 `media/flight/optimized/v1/` 中的电脑和手机副本。原片、旧网页副本、本地截图与备份不纳入发布仓库。新照片和视频应先生成适合网页的副本，原件保存在仓库外。
+三段视频优先使用 `media/flight/hls/v1/` 中约 2 秒一个的 fMP4 分段，播放器在接近视野时才加载。支持 MediaSource 的浏览器按需加载 hls.js light；其他支持原生 HLS 的浏览器使用原生播放。`media/flight/optimized/v1/` 中的电脑和手机 MP4 为兼容回退。原片、旧网页副本、本地截图与备份不纳入发布仓库。新照片和视频应先生成适合网页的副本，原件保存在仓库外。
 
 ## Cloudflare Pages 自动发布
 

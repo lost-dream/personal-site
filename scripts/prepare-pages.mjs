@@ -1,4 +1,4 @@
-import { readFile, writeFile, readdir, rm, stat } from 'node:fs/promises';
+import { readFile, writeFile, appendFile, readdir, rm, stat } from 'node:fs/promises';
 import { resolve, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -36,6 +36,7 @@ if (production) {
 }
 await writeFile(join(output, 'index.html'), html);
 await writeFile(join(output, '_headers'), `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n${production ? '' : '  X-Robots-Tag: noindex, nofollow\n'}/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n/media/*\n  Cache-Control: public, max-age=3600\n/\n  Cache-Control: public, max-age=0, must-revalidate\n/index.html\n  Cache-Control: public, max-age=0, must-revalidate\n`);
+await appendFile(join(output, '_headers'), '/media/flight/hls/*.m3u8\n  Content-Type: application/vnd.apple.mpegurl\n/media/flight/hls/*.m4s\n  Content-Type: video/mp4\n');
 // Pages would otherwise serve the SPA HTML for missing images/videos as well.
 await writeFile(join(output, '404.html'), '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>页面未找到 · 池树孝</title><body style="background:#0b0d10;color:#eef2f6;font:18px system-ui;padding:10vw"><h1>页面未找到</h1><p>这个地址暂时没有内容。</p><a href="/" style="color:#a7c8ff">回到首页</a></body></html>');
 

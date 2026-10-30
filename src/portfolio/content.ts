@@ -10,6 +10,8 @@ export type Photo = {
   note?: string;
   src?: string;
   mobileSrc?: string;
+  hlsSrc?: string;
+  mobileHlsSrc?: string;
   thumbnail?: string;
   alt?: string;
   kind?: "image" | "video";
@@ -70,6 +72,14 @@ export type PortfolioContent = {
 
 const slots = (prefix: string, titles: string[]): Photo[] =>
   titles.map((title, i) => ({ id: `${prefix}-${i}`, title }));
+const flightVideo = (number: number, title: string, width = 1920): Photo => ({
+  id: `flight-${number}`, title, kind: "video", width, height: 1080,
+  src: `${import.meta.env.BASE_URL}media/flight/optimized/v1/${number}-desktop.mp4`,
+  mobileSrc: `${import.meta.env.BASE_URL}media/flight/optimized/v1/${number}-mobile.mp4`,
+  hlsSrc: `${import.meta.env.BASE_URL}media/flight/hls/v1/${number}-desktop/index.m3u8`,
+  mobileHlsSrc: `${import.meta.env.BASE_URL}media/flight/hls/v1/${number}-mobile/index.m3u8`,
+  poster: `${import.meta.env.BASE_URL}media/flight/${number}-poster.jpg`,
+});
 const documents = (group: "awards" | "certificates", label: string): Photo[] =>
   experiencePhotos[group].map((photo, index, pages) => ({
     id: `${group}-${index + 1}`,
@@ -106,9 +116,9 @@ export const portfolioContent: PortfolioContent = {
     { label: "抖音账号 02", value: "26471967472", platform: "douyin" },
   ],
   videos: [
-    { id: "video-1", title: "飞行影像", note: "", video: { id: "flight-1", title: "右侧飞行视频", kind: "video", src: `${import.meta.env.BASE_URL}media/flight/optimized/v1/1-desktop.mp4`, mobileSrc: `${import.meta.env.BASE_URL}media/flight/optimized/v1/1-mobile.mp4`, poster: `${import.meta.env.BASE_URL}media/flight/1-poster.jpg`, width: 1440, height: 1080 } },
-    { id: "video-2", title: "飞行影像", note: "", video: { id: "flight-2", title: "左上飞行视频", kind: "video", src: `${import.meta.env.BASE_URL}media/flight/optimized/v1/2-desktop.mp4`, mobileSrc: `${import.meta.env.BASE_URL}media/flight/optimized/v1/2-mobile.mp4`, poster: `${import.meta.env.BASE_URL}media/flight/2-poster.jpg`, width: 1920, height: 1080 } },
-    { id: "video-3", title: "飞行影像", note: "", video: { id: "flight-3", title: "左下飞行视频", kind: "video", src: `${import.meta.env.BASE_URL}media/flight/optimized/v1/3-desktop.mp4`, mobileSrc: `${import.meta.env.BASE_URL}media/flight/optimized/v1/3-mobile.mp4`, poster: `${import.meta.env.BASE_URL}media/flight/3-poster.jpg`, width: 1920, height: 1080 } },
+    { id: "video-1", title: "飞行影像", note: "", video: flightVideo(1, "右侧飞行视频", 1440) },
+    { id: "video-2", title: "飞行影像", note: "", video: flightVideo(2, "左上飞行视频") },
+    { id: "video-3", title: "飞行影像", note: "", video: flightVideo(3, "左下飞行视频") },
   ],
   programs: [
     {
