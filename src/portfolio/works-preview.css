@@ -1,0 +1,9 @@
+/* Extension-only chrome; module layout, colors and interactions are unchanged. */
+.v2-works-preview { min-height: 100svh; isolation: isolate; position: relative; }
+.v2-works-preview > :is(header, main) { position: relative; z-index: 1; }
+.v2-preview-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 24px; }
+.v2-preview-bar { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-block: 24px; border-bottom: 1px solid var(--line); font-size: 13px; color: var(--v2-muted); }
+.v2-preview-bar a { color: var(--text); min-height: 44px; display: inline-flex; align-items: center; }
+.v2-preview-bar a:focus-visible { outline: 2px solid #9cbcff; outline-offset: 4px; }
+.v2-works-preview .v2-works { padding-top: clamp(56px, 7vw, 120px); }
+@media (width < 600px) { .v2-preview-bar { align-items: flex-start; flex-direction: column; gap: 4px; padding-block: 16px; } }

@@ -1,0 +1,72 @@
+/* Frameless pairs: screenshots keep their original proportions and QR quiet zones. */
+.v2-programs {
+  --program-screenshot-width: 300px;
+  --program-qr-size: 176px;
+  --program-pair-gap: clamp(32px, 4vw, 64px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px var(--program-pair-gap);
+  align-items: start;
+}
+.v2-programs .v2-program {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(20px, 2vw, 32px);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+.v2-programs .v2-program-preview {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: auto;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  justify-self: center;
+}
+.v2-programs .v2-program-preview .v2-media {
+  width: min(100%, var(--program-screenshot-width));
+  height: auto;
+  background: transparent;
+  border-radius: 16px;
+}
+.v2-programs .v2-program .v2-program-preview img {
+  height: auto;
+  padding: 0;
+  object-fit: contain;
+}
+.v2-programs .v2-program-copy { min-width: 0; padding: 0; }
+.v2-programs .v2-program-copy p { line-height: 1.75; }
+.v2-programs .v2-qr {
+  width: var(--program-qr-size);
+  height: auto;
+  aspect-ratio: 1;
+  max-width: 100%;
+  border: 12px solid white;
+  background: white;
+  margin-block: 24px 12px;
+}
+.v2-programs .v2-qr .v2-media { background: white; }
+.v2-programs .v2-program .v2-qr img { padding: 0; }
+.v2-programs :is(.v2-program-preview, .v2-qr):focus-visible {
+  outline: 2px solid #9cbcff;
+  outline-offset: 5px;
+}
+@media (width < 1024px) {
+  .v2-programs { grid-template-columns: minmax(0, 1fr); gap: 56px; }
+  .v2-programs .v2-program { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; }
+}
+@media (width < 600px) {
+  .v2-programs { --program-screenshot-width: 280px; }
+  .v2-programs .v2-program { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .v2-programs .v2-program-copy { width: min(100%, 320px); justify-self: center; }
+}

@@ -1,0 +1,70 @@
+@import './tokens.css';
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--page);
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--text);
+  font: 400 17px/1.6 "Noto Sans SC Variable", sans-serif;
+}
+
+h1,
+h2,
+h3,
+.wordmark {
+  font-family: "Archivo Variable", "Noto Sans SC Variable", sans-serif;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+button,
+a {
+  color: inherit;
+  font: inherit;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgb(40 100 232 / 24%);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: 16px;
+  left: 16px;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  background: var(--text);
+  color: var(--page);
+  transform: translateY(-180%);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+@media (width < 768px) {
+  body {
+    overflow-x: clip;
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

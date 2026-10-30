@@ -1,0 +1,13 @@
+.v2-contact-shell { position: relative; border-radius: 24px; isolation: isolate; }
+.v2-contact-shell::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border: 1px solid rgb(127 174 255 / 18%);
+  border-radius: inherit;
+  box-shadow: 0 0 20px rgb(104 191 195 / 7%);
+  pointer-events: none;
+}
+.v2-pulsating-light { position: absolute; inset: 0; z-index: 3; pointer-events: none; border-radius: inherit; }
+@media (width < 1024px) { .v2-contact-shell { max-width: 600px; } }
+@media (prefers-reduced-transparency: reduce) { .v2-pulsating-light { display: none; } }

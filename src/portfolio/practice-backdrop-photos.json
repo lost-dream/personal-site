@@ -1,0 +1,74 @@
+[
+  {
+    "file": "background-01.webp",
+    "source": "z139.JPG",
+    "width": 1000,
+    "height": 750
+  },
+  {
+    "file": "background-02.webp",
+    "source": "z10.heic",
+    "width": 750,
+    "height": 1000
+  },
+  {
+    "file": "background-03.webp",
+    "source": "z28.HEIC",
+    "width": 750,
+    "height": 1000
+  },
+  {
+    "file": "background-04.webp",
+    "source": "z126.jpg",
+    "width": 1000,
+    "height": 750
+  },
+  {
+    "file": "background-05.webp",
+    "source": "z14.JPG",
+    "width": 750,
+    "height": 1000
+  },
+  {
+    "file": "background-06.webp",
+    "source": "z41.PNG",
+    "width": 751,
+    "height": 1000
+  },
+  {
+    "file": "background-07.webp",
+    "source": "z146.png",
+    "width": 1000,
+    "height": 750
+  },
+  {
+    "file": "background-08.webp",
+    "source": "z25.JPG",
+    "width": 750,
+    "height": 1000
+  },
+  {
+    "file": "background-09.webp",
+    "source": "z7.JPG",
+    "width": 269,
+    "height": 404
+  },
+  {
+    "file": "background-10.webp",
+    "source": "z168.jpg",
+    "width": 1000,
+    "height": 650
+  },
+  {
+    "file": "background-11.webp",
+    "source": "z18.JPG",
+    "width": 750,
+    "height": 1000
+  },
+  {
+    "file": "background-12.webp",
+    "source": "z94.HEIC",
+    "width": 750,
+    "height": 1000
+  }
+]

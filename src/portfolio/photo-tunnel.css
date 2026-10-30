@@ -1,0 +1,79 @@
+.v2-tunnel-region { position: relative; min-width: 0; height: 100%; }
+.v2-tunnel-stage {
+  position: relative;
+  isolation: isolate;
+  height: 100%;
+  overflow: hidden;
+}
+.v2-tunnel-stage:focus-visible { outline: 1px solid #9cbcff; outline-offset: -16px; }
+.v2-tunnel-atmosphere {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgb(8 15 26 / var(--tunnel-background-shade));
+  backdrop-filter: blur(var(--tunnel-background-blur));
+  -webkit-backdrop-filter: blur(var(--tunnel-background-blur));
+  box-shadow: inset 0 0 100px 30px rgb(0 5 15 / 38%);
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+}
+.v2-galaxy-halo {
+  position: absolute;
+  width: 48%;
+  aspect-ratio: 1;
+  top: var(--tunnel-center-y);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background: radial-gradient(ellipse, #f0d3a32b 0%, #8774bd17 28%, #a7c8ff0a 48%, transparent 70%);
+  filter: blur(18px);
+}
+.v2-galaxy-field, .v2-galaxy-stream {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+.v2-galaxy-field { opacity: var(--galaxy-field-opacity); }
+.v2-galaxy-stream { opacity: var(--galaxy-stream-opacity); }
+.portfolio-v2 .v2-tunnel-photo, .portfolio-v2 .v2-tunnel-photo:active {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 0;
+  padding: 0;
+  border-radius: var(--tunnel-photo-radius);
+  background: transparent;
+  box-shadow: 0 12px 35px rgb(0 5 20 / 32%);
+  will-change: transform, opacity;
+  transform-origin: center;
+}
+.v2-tunnel-photo .v2-media { background: transparent; width: 100%; height: 100%; }
+.v2-tunnel-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: var(--tunnel-photo-opacity);
+  border-radius: var(--tunnel-photo-radius);
+  mask-image: linear-gradient(to right, transparent, black var(--tunnel-feather), black calc(100% - var(--tunnel-feather)), transparent),
+    linear-gradient(to bottom, transparent, black var(--tunnel-feather), black calc(100% - var(--tunnel-feather)), transparent);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+}
+.v2-tunnel-photo:focus-visible { outline: 2px solid #9cbcff; outline-offset: 6px; }
+.v2-tunnel-photo .v2-media.is-contained img { padding: 0; }
+/* Instructions remain available to assistive technology, with no visible tools. */
+.v2-tunnel-accessible-hint { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.v2-tunnel-region[data-static] .v2-tunnel-stage { display: grid; grid-template-columns: repeat(3, 1fr); align-content: start; gap: 18px; padding: 20px; overflow-y: auto; mask-image: none; }
+.v2-tunnel-region[data-static] .v2-tunnel-photo { position: relative; inset: auto; width: 100%; height: 220px; transform: none; will-change: auto; }
+@media (width < 1024px) {
+  .v2-tunnel-region { height: clamp(420px, 65vw, 620px); }
+}
+@media (width < 600px) {
+  .v2-tunnel-region { height: 420px; }
+  .v2-tunnel-region[data-static] .v2-tunnel-stage { grid-template-columns: repeat(2, 1fr); padding: 12px; }
+  .v2-tunnel-region[data-static] .v2-tunnel-photo { height: 180px; }
+}

@@ -1,0 +1,112 @@
+/* Match both sides at one opaque seam; gradients affect backgrounds only. */
+.v2-hero .v2-hero-backdrop::after {
+  background: linear-gradient(to top, #0b0e13, transparent clamp(140px, 15vw, 260px)),
+    linear-gradient(90deg, rgb(10 14 21 / 78%), rgb(10 14 21 / 46%));
+}
+.v2-experience .v2-hero-backdrop::after {
+  background: linear-gradient(to bottom, #0b0e13, transparent clamp(140px, 15vw, 260px)),
+    linear-gradient(to top, #0b0e13, transparent 22%),
+    linear-gradient(90deg, rgb(10 14 21 / 78%), rgb(10 14 21 / 46%));
+}
+
+.v2-glass-opening { display: none; }
+.v2-hero-copy {
+  --hero-settle-x: clamp(12px, 3vw, 64px);
+  --hero-settle-y: clamp(18px, 2.4vw, 48px);
+  --hero-settle-duration: 0.6s;
+  --hero-settle-delay: 0.7s;
+  /* Smooth in/out preset from ultimate-animations: no overshoot. */
+  --hero-settle-ease: cubic-bezier(0.65, 0, 0.35, 1);
+}
+@media (width < 1024px) {
+  .v2-hero-copy { --hero-settle-x: 12px; --hero-settle-y: 18px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) .v2-glass-opening {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    overflow: hidden;
+    pointer-events: none;
+    animation: v2-glass-dismiss 1.2s steps(1, end) both;
+  }
+  .v2-glass-shutter {
+    --shutter-feather: clamp(24px, 3vw, 64px);
+    position: absolute;
+    inset-block: 0;
+    width: calc(50% + 1px);
+    background: linear-gradient(135deg, rgb(174 196 213 / 17%), rgb(12 20 31 / 80%));
+    backdrop-filter: blur(16px) saturate(0.65);
+    -webkit-backdrop-filter: blur(16px) saturate(0.65);
+    box-shadow: inset 0 0 70px rgb(255 255 255 / 3%);
+  }
+  .shutter-left {
+    left: 0;
+    mask-image: linear-gradient(to right, black calc(100% - var(--shutter-feather)), transparent);
+    -webkit-mask-image: linear-gradient(to right, black calc(100% - var(--shutter-feather)), transparent);
+    animation: v2-glass-left 1.05s 0.08s cubic-bezier(0.76, 0, 0.24, 1) both;
+  }
+  .shutter-right {
+    right: 0;
+    mask-image: linear-gradient(to left, black calc(100% - var(--shutter-feather)), transparent);
+    -webkit-mask-image: linear-gradient(to left, black calc(100% - var(--shutter-feather)), transparent);
+    animation: v2-glass-right 1.05s 0.08s cubic-bezier(0.76, 0, 0.24, 1) both;
+  }
+  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) [data-opening-title] {
+    animation: v2-glass-title 0.85s 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+    transform-origin: left center;
+  }
+  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) .v2-title-mask:nth-child(2) [data-opening-title] { animation-delay: 0.28s; }
+  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) [data-opening-copy] {
+    animation: v2-glass-copy 0.7s 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) .v2-identity { animation-delay: 0.4s; }
+  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) .v2-contact-shell { animation-delay: 0.45s; }
+  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) [data-opening-nav] {
+    animation: v2-glass-copy 0.65s 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) [data-v2-opening-gallery] {
+    animation: v2-glass-gallery 0.95s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  /* Outer blocks own this second movement; child entrance transforms stay independent. */
+  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) .v2-hero-lead {
+    animation: v2-hero-settle-up var(--hero-settle-duration) var(--hero-settle-delay) var(--hero-settle-ease) both;
+  }
+  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) .v2-hero-contact-block {
+    animation: v2-hero-settle-down var(--hero-settle-duration) var(--hero-settle-delay) var(--hero-settle-ease) both;
+  }
+  .portfolio-v2[data-opening="complete"] .v2-hero-lead {
+    transform: translate3d(calc(-1 * var(--hero-settle-x)), calc(-1 * var(--hero-settle-y)), 0);
+  }
+  .portfolio-v2[data-opening="complete"] .v2-hero-contact-block {
+    transform: translate3d(calc(-1 * var(--hero-settle-x)), var(--hero-settle-y), 0);
+  }
+  @keyframes v2-hero-settle-up {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(calc(-1 * var(--hero-settle-x)), calc(-1 * var(--hero-settle-y)), 0); }
+  }
+  @keyframes v2-hero-settle-down {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(calc(-1 * var(--hero-settle-x)), var(--hero-settle-y), 0); }
+  }
+  @keyframes v2-glass-left { from { transform: translateX(0); } to { transform: translateX(-102%); } }
+  @keyframes v2-glass-right { from { transform: translateX(0); } to { transform: translateX(102%); } }
+  @keyframes v2-glass-dismiss { from { visibility: visible; } to { visibility: hidden; } }
+  @keyframes v2-glass-title {
+    from { opacity: 0; transform: translate(5vw, 112%) scaleX(0.78); }
+    to { opacity: 1; transform: translate(0, 0) scaleX(1); }
+  }
+  @keyframes v2-glass-copy {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes v2-glass-gallery {
+    from { opacity: 0; transform: translateX(8vw) scale(0.92); }
+    to { opacity: 1; transform: translateX(0) scale(1); }
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .v2-glass-shutter { background: #141e2a; backdrop-filter: none; -webkit-backdrop-filter: none; }
+}

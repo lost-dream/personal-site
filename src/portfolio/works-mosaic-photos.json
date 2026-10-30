@@ -1,0 +1,290 @@
+[
+  {
+    "file": "photo-01.webp",
+    "source": "IMG_1623.jpg",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-02.webp",
+    "source": "z5.jpg",
+    "width": 720,
+    "height": 1280
+  },
+  {
+    "file": "photo-03.webp",
+    "source": "z9.JPG",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-04.webp",
+    "source": "z12.JPG",
+    "width": 962,
+    "height": 1280
+  },
+  {
+    "file": "photo-05.webp",
+    "source": "z15.JPG",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-06.webp",
+    "source": "z18.JPG",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-07.webp",
+    "source": "z21.JPG",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-08.webp",
+    "source": "z24.heic",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-09.webp",
+    "source": "z27.JPG",
+    "width": 962,
+    "height": 1280
+  },
+  {
+    "file": "photo-10.webp",
+    "source": "z30.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-11.webp",
+    "source": "z33.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-12.webp",
+    "source": "z37.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-13.webp",
+    "source": "z42.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-14.webp",
+    "source": "z45.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-15.webp",
+    "source": "z48.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-16.webp",
+    "source": "z51.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-17.webp",
+    "source": "z54.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-18.webp",
+    "source": "z59.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-19.webp",
+    "source": "z63.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-20.webp",
+    "source": "z66.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-21.webp",
+    "source": "z69.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-22.webp",
+    "source": "z72.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-23.webp",
+    "source": "z75.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-24.webp",
+    "source": "z78.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-25.webp",
+    "source": "z82.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-26.webp",
+    "source": "z85.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-27.webp",
+    "source": "z88.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-28.webp",
+    "source": "z92.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-29.webp",
+    "source": "z96.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-30.webp",
+    "source": "z99.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-31.webp",
+    "source": "z102.HEIC",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-32.webp",
+    "source": "z108.JPG",
+    "width": 1024,
+    "height": 1280
+  },
+  {
+    "file": "photo-33.webp",
+    "source": "z112.JPG",
+    "width": 1280,
+    "height": 1280
+  },
+  {
+    "file": "photo-34.webp",
+    "source": "z115.JPG",
+    "width": 1280,
+    "height": 1280
+  },
+  {
+    "file": "photo-35.webp",
+    "source": "z120.jpg",
+    "width": 1280,
+    "height": 960
+  },
+  {
+    "file": "photo-36.webp",
+    "source": "z123.JPG",
+    "width": 910,
+    "height": 683
+  },
+  {
+    "file": "photo-37.webp",
+    "source": "z127.jpg",
+    "width": 1280,
+    "height": 960
+  },
+  {
+    "file": "photo-38.webp",
+    "source": "z130.JPG",
+    "width": 1280,
+    "height": 960
+  },
+  {
+    "file": "photo-39.webp",
+    "source": "z135.JPG",
+    "width": 1280,
+    "height": 960
+  },
+  {
+    "file": "photo-40.webp",
+    "source": "z140.jpeg",
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "photo-41.webp",
+    "source": "z147.png",
+    "width": 1280,
+    "height": 960
+  },
+  {
+    "file": "photo-42.webp",
+    "source": "z151.HEIC",
+    "width": 1280,
+    "height": 960
+  },
+  {
+    "file": "photo-43.webp",
+    "source": "z155.HEIC",
+    "width": 1280,
+    "height": 960
+  },
+  {
+    "file": "photo-44.webp",
+    "source": "z161.HEIC",
+    "width": 1280,
+    "height": 960
+  },
+  {
+    "file": "photo-45.webp",
+    "source": "z165.png",
+    "width": 1280,
+    "height": 960
+  },
+  {
+    "file": "photo-46.webp",
+    "source": "z170.HEIC",
+    "width": 1280,
+    "height": 720
+  },
+  {
+    "file": "photo-47.webp",
+    "source": "z175.jpg",
+    "width": 1280,
+    "height": 720
+  },
+  {
+    "file": "photo-48.webp",
+    "source": "z182.png",
+    "width": 1280,
+    "height": 720
+  }
+]

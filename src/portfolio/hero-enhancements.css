@@ -1,0 +1,97 @@
+/* The PC tunnel fills the reference's red area: below the nav, right 57% of Hero.
+   Copy keeps the existing 1700px grid; only imagery breaks out to the right edge. */
+@media (width >= 1024px) {
+  .v2-hero-gallery {
+    position: absolute;
+    inset: 80px 0 0 43%;
+    z-index: 1;
+    padding: 0;
+  }
+}
+
+/* One transform owner: physics moves tiles; hover feedback moves only the image layer. */
+.v2-wall-hero .v2-wall-tiles[data-floating] {
+  position: relative;
+  display: block;
+}
+.v2-wall-hero .v2-wall-tiles[data-floating] .v2-wall-tile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  transition: none;
+  will-change: transform;
+}
+.v2-wall-hero .v2-wall-tiles[data-floating] .v2-wall-frame {
+  animation: v2-floating-photo-reveal 0.8s ease-out both;
+}
+.v2-wall-hero .v2-wall-tiles[data-floating] .v2-media {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .v2-wall-hero .v2-wall-tiles[data-floating] .v2-wall-tile:hover .v2-media {
+    transform: translateY(-4px);
+  }
+}
+@keyframes v2-floating-photo-reveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* A single glass panel with real four-quadrant divisions. */
+.v2-hero .v2-glass-card {
+  padding: 0;
+  overflow: hidden;
+}
+.v2-social-grid {
+  gap: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.v2-social {
+  position: relative;
+  isolation: isolate;
+  min-height: 96px;
+  padding: 20px;
+  overflow: hidden;
+  gap: 8px;
+  background: rgb(13 22 35 / 32%);
+}
+.v2-social:nth-child(odd) {
+  border-right: 1px solid rgb(238 242 246 / 18%);
+}
+.v2-social:nth-child(-n + 2) {
+  border-bottom: 1px solid rgb(238 242 246 / 18%);
+}
+.v2-social-brand {
+  position: absolute;
+  z-index: -2;
+  right: 12px;
+  top: 50%;
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  transform: translateY(-50%) rotate(-10deg);
+  border-radius: 22px;
+  opacity: 0.23;
+  pointer-events: none;
+}
+.v2-social::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(90deg, rgb(12 20 32 / 58%), transparent);
+  pointer-events: none;
+}
+.v2-social-account { min-width: 0; }
+.v2-social-actions { flex-shrink: 0; }
+.v2-social strong { color: #eef2f6; }
+.v2-socials .v2-feedback:not(:empty) { margin: 0; padding: 12px 20px; }
+@media (width < 768px) {
+  .v2-social { padding: 16px 12px; min-height: 106px; }
+  .v2-social-brand { width: 86px; height: 86px; right: -5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .v2-wall-hero .v2-wall-tiles[data-floating] .v2-wall-frame { animation: none; }
+  .v2-wall-hero .v2-wall-tiles[data-floating] .v2-media { transition: none; transform: none; }
+}

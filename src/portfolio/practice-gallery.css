@@ -1,0 +1,70 @@
+.v2-practice-gallery {
+  position: relative;
+  isolation: isolate;
+  background: #0e141d;
+}
+.v2-practice-gallery > .v2-container { position: relative; z-index: 1; }
+/* Match the neighboring sections in the full site; isolated previews stay unchanged. */
+.v2-main-site .v2-practice-gallery { background: var(--page); }
+.v2-main-site .v2-practice-backdrop {
+  mask-image: linear-gradient(to bottom, transparent, #000 180px, #000 calc(100% - 180px), transparent);
+}
+.v2-gallery-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; }
+.portfolio-v2 .v2-gallery-eyebrow { margin-bottom: 24px; color: var(--v2-muted); font-size: 13px; letter-spacing: .12em; }
+.v2-gallery-pause {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 44px; padding: 10px 16px; border: 1px solid var(--line);
+  border-radius: 24px; background: rgb(238 242 246 / 4%); color: var(--v2-muted);
+  font: inherit; font-size: 13px; flex-shrink: 0;
+}
+.v2-gallery-pause:hover { background: rgb(238 242 246 / 9%); color: var(--text); }
+.v2-gallery-pause:focus-visible { outline: 2px solid #9cbcff; outline-offset: 4px; }
+.v2-gallery-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-block: 40px 48px; color: var(--v2-muted); font-size: 12px; }
+.v2-gallery-grid {
+  --gallery-row-height: clamp(260px, 25vw, 410px);
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(28px, 3vw, 48px); align-items: start;
+}
+.v2-gallery-tile { min-width: 0; grid-column: span 3; }
+.gallery-competition { grid-column: span 6; }
+.gallery-selfies { margin-top: 38px; }
+.gallery-practice { margin-top: 30px; }
+.gallery-mountain { grid-column: span 4; }
+.gallery-lulu { grid-column: span 2; margin-top: 48px; }
+.gallery-daily { margin-top: 12px; }
+.v2-practice-gallery .v2-gallery-tile .v2-wall-tile {
+  height: var(--gallery-row-height); aspect-ratio: auto;
+  border: 0; background: transparent; box-shadow: none;
+  opacity: var(--gallery-photo-opacity);
+  transition: opacity .4s;
+}
+.v2-practice-gallery .v2-gallery-tile .v2-wall-tile:hover { opacity: 1; }
+.v2-practice-gallery .v2-gallery-tile .v2-media.is-contained img {
+  border-radius: 12px;
+  mask-image: linear-gradient(to right, transparent, black var(--gallery-feather), black calc(100% - var(--gallery-feather)), transparent), linear-gradient(to bottom, transparent, black var(--gallery-feather), black calc(100% - var(--gallery-feather)), transparent);
+}
+.v2-practice-gallery .v2-document-arrow { width: 36px; height: 44px; opacity: 0; transition: opacity .3s, background .3s; }
+.v2-practice-gallery .v2-document-arrow.arrow-left { left: 0; }
+.v2-practice-gallery .v2-document-arrow.arrow-right { right: 0; }
+.v2-practice-gallery .v2-document-wall:is(:hover, :focus-within) .v2-document-arrow { opacity: 1; }
+.v2-gallery-caption { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 22px; }
+.portfolio-v2 .v2-gallery-caption h3 { font-size: 16px; font-weight: 500; }
+.v2-gallery-caption span { color: var(--v2-muted); font-size: 12px; white-space: nowrap; }
+@media (width < 1100px) {
+  .v2-gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); --gallery-row-height: 340px; }
+  .v2-gallery-tile { grid-column: span 1; margin-top: 0; }
+  .gallery-competition { grid-column: 1 / -1; }
+}
+@media (width < 600px) {
+  .v2-gallery-heading { align-items: flex-start; flex-direction: column; gap: 24px; }
+  .v2-practice-gallery .v2-heading { font-size: clamp(32px, 8vw, 48px); }
+  .v2-gallery-meta { margin-block: 32px; }
+  .v2-gallery-grid { gap: 32px 20px; --gallery-row-height: 220px; }
+  .gallery-competition { --gallery-row-height: 280px; }
+  .v2-gallery-caption { margin-top: 16px; gap: 6px; flex-wrap: wrap; }
+  .portfolio-v2 .v2-gallery-caption h3 { font-size: 14px; }
+  .gallery-flight .v2-gallery-caption h3 { font-size: 12px; }
+}
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .v2-practice-gallery .v2-document-arrow { opacity: 1; }
+}

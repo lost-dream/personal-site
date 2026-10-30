@@ -1,0 +1,530 @@
+[
+  {
+    "file": "poster-001.webp",
+    "source": "16_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-002.webp",
+    "source": "26_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-003.webp",
+    "source": "41_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-004.webp",
+    "source": "42_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-005.webp",
+    "source": "43_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-006.webp",
+    "source": "44_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-007.webp",
+    "source": "45_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-008.webp",
+    "source": "46_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-009.webp",
+    "source": "47_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-010.webp",
+    "source": "48_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-011.webp",
+    "source": "49_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-012.webp",
+    "source": "50_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-013.webp",
+    "source": "52_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-014.webp",
+    "source": "56_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-015.webp",
+    "source": "58_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-016.webp",
+    "source": "60_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-017.webp",
+    "source": "61_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-018.webp",
+    "source": "63_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-019.webp",
+    "source": "65_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-020.webp",
+    "source": "66_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-021.webp",
+    "source": "69_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-022.webp",
+    "source": "72_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-023.webp",
+    "source": "73_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-024.webp",
+    "source": "74_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-025.webp",
+    "source": "75_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-026.webp",
+    "source": "76_gc-minimal-zine-poster-v0-1.png",
+    "width": 360,
+    "height": 480
+  },
+  {
+    "file": "poster-027.webp",
+    "source": "78_gc-minimal-zine-poster-v0-1.png",
+    "width": 361,
+    "height": 480
+  },
+  {
+    "file": "poster-028.webp",
+    "source": "79_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-029.webp",
+    "source": "80_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-030.webp",
+    "source": "81_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-031.webp",
+    "source": "82_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-032.webp",
+    "source": "83_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-033.webp",
+    "source": "84_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-034.webp",
+    "source": "85_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-035.webp",
+    "source": "86_gc-minimal-zine-poster-v0-1.png",
+    "width": 360,
+    "height": 480
+  },
+  {
+    "file": "poster-036.webp",
+    "source": "87_gc-minimal-zine-poster-v0-1.png",
+    "width": 360,
+    "height": 480
+  },
+  {
+    "file": "poster-037.webp",
+    "source": "88_gc-minimal-zine-poster-v0-1.png",
+    "width": 360,
+    "height": 480
+  },
+  {
+    "file": "poster-038.webp",
+    "source": "91_gc-minimal-zine-poster-v0-1.png",
+    "width": 361,
+    "height": 480
+  },
+  {
+    "file": "poster-039.webp",
+    "source": "92_gc-minimal-zine-poster-v0-1.png",
+    "width": 360,
+    "height": 480
+  },
+  {
+    "file": "poster-040.webp",
+    "source": "95_gc-minimal-zine-poster-v0-1.png",
+    "width": 360,
+    "height": 480
+  },
+  {
+    "file": "poster-041.webp",
+    "source": "102_gc-minimal-zine-poster-v0-1.png",
+    "width": 360,
+    "height": 480
+  },
+  {
+    "file": "poster-042.webp",
+    "source": "104_gc-minimal-zine-poster-v0-1.png",
+    "width": 360,
+    "height": 480
+  },
+  {
+    "file": "poster-043.webp",
+    "source": "108_gc-minimal-zine-poster-v0-1.png",
+    "width": 384,
+    "height": 480
+  },
+  {
+    "file": "poster-044.webp",
+    "source": "109_gc-minimal-zine-poster-v0-1.png",
+    "width": 384,
+    "height": 480
+  },
+  {
+    "file": "poster-045.webp",
+    "source": "112_gc-minimal-zine-poster-v0-1.png",
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "poster-046.webp",
+    "source": "113_gc-minimal-zine-poster-v0-1.png",
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "poster-047.webp",
+    "source": "116_gc-minimal-zine-poster-v0-1.png",
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "poster-048.webp",
+    "source": "117_gc-minimal-zine-poster-v0-1.png",
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "poster-049.webp",
+    "source": "118_gc-minimal-zine-poster-v0-1.png",
+    "width": 480,
+    "height": 463
+  },
+  {
+    "file": "poster-050.webp",
+    "source": "119_gc-minimal-zine-poster-v0-1.png",
+    "width": 480,
+    "height": 452
+  },
+  {
+    "file": "poster-051.webp",
+    "source": "120_gc-minimal-zine-poster-v0-1.png",
+    "width": 480,
+    "height": 360
+  },
+  {
+    "file": "poster-052.webp",
+    "source": "121_gc-minimal-zine-poster-v0-1.png",
+    "width": 480,
+    "height": 360
+  },
+  {
+    "file": "poster-053.webp",
+    "source": "123_gc-minimal-zine-poster-v0-1.png",
+    "width": 480,
+    "height": 360
+  },
+  {
+    "file": "poster-054.webp",
+    "source": "124_gc-minimal-zine-poster-v0-1.png",
+    "width": 480,
+    "height": 360
+  },
+  {
+    "file": "poster-055.webp",
+    "source": "127_gc-minimal-zine-poster-v0-1.png",
+    "width": 480,
+    "height": 360
+  },
+  {
+    "file": "poster-056.webp",
+    "source": "128_gc-minimal-zine-poster-v0-1.png",
+    "width": 480,
+    "height": 360
+  },
+  {
+    "file": "poster-057.webp",
+    "source": "129_gc-minimal-zine-poster-v0-1.png",
+    "width": 480,
+    "height": 360
+  },
+  {
+    "file": "poster-058.webp",
+    "source": "130_gc-minimal-zine-poster-v0-1.png",
+    "width": 480,
+    "height": 360
+  },
+  {
+    "file": "poster-059.webp",
+    "source": "133_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-060.webp",
+    "source": "134_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-061.webp",
+    "source": "135_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-062.webp",
+    "source": "138_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-063.webp",
+    "source": "139_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-064.webp",
+    "source": "140_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-065.webp",
+    "source": "143_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-066.webp",
+    "source": "146_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-067.webp",
+    "source": "147_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-068.webp",
+    "source": "149_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-069.webp",
+    "source": "150_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-070.webp",
+    "source": "151_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-071.webp",
+    "source": "152_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-072.webp",
+    "source": "153_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-073.webp",
+    "source": "155_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-074.webp",
+    "source": "157_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-075.webp",
+    "source": "160_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-076.webp",
+    "source": "161_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-077.webp",
+    "source": "163_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-078.webp",
+    "source": "164_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-079.webp",
+    "source": "165_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-080.webp",
+    "source": "168_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-081.webp",
+    "source": "169_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-082.webp",
+    "source": "170_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-083.webp",
+    "source": "172_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-084.webp",
+    "source": "175_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-085.webp",
+    "source": "179_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-086.webp",
+    "source": "181_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-087.webp",
+    "source": "182_gc-minimal-zine-poster-v0-1.png",
+    "width": 288,
+    "height": 480
+  },
+  {
+    "file": "poster-088.webp",
+    "source": "IMG_7023_gc-minimal-zine-poster.png",
+    "width": 288,
+    "height": 480
+  }
+]

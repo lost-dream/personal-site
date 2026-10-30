@@ -1,0 +1,28 @@
+.v2-works { position: relative; isolation: isolate; }
+.v2-works > .v2-container { position: relative; z-index: 1; }
+.v2-works-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+.v2-works-photo-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #0b0e13;
+  mask-image: linear-gradient(to bottom, transparent, #000 var(--works-photo-edge-fade), #000 calc(100% - var(--works-photo-edge-fade)), transparent);
+}
+.v2-works-background-photo {
+  position: absolute;
+  display: block;
+  max-width: none;
+  border-radius: var(--works-photo-radius);
+  object-fit: contain;
+  filter: blur(var(--works-photo-blur)) saturate(.78);
+  /* Exact 5px opacity feather, independent of the 5px soft-focus filter. */
+  mask-image: linear-gradient(to right, transparent, #000 var(--works-photo-feather), #000 calc(100% - var(--works-photo-feather)), transparent), linear-gradient(to bottom, transparent, #000 var(--works-photo-feather), #000 calc(100% - var(--works-photo-feather)), transparent);
+  mask-composite: intersect;
+}
+.v2-works-photo-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgb(10 14 21 / 68%), rgb(10 14 21 / 54%));
+}

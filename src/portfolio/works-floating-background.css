@@ -1,0 +1,48 @@
+.v2-paper-stream {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: clip;
+  pointer-events: none;
+}
+.v2-paper-stream-viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  contain: strict;
+  background: #0b0f16;
+}
+/* A viewport-sized field follows the reader only within the works section. */
+.v2-paper-stream.is-section-contained { position: absolute; }
+.is-section-contained > .v2-paper-stream-viewport {
+  position: sticky;
+  inset: auto;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  width: 100%;
+}
+.v2-works { position: relative; isolation: isolate; }
+.v2-works > .v2-container { position: relative; z-index: 1; }
+.v2-works-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+.v2-background-pause { min-height: 44px; padding: 0; color: var(--v2-muted); background: transparent; border: 0; cursor: pointer; font: inherit; }
+.v2-background-pause:hover { color: var(--text); }
+.v2-background-pause:focus-visible { outline: 2px solid #9cbcff; outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce) { .v2-background-pause { display: none; } }
+.v2-paper-stream-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: contain;
+  opacity: 0;
+  border-radius: var(--paper-radius);
+  filter: blur(var(--paper-blur)) saturate(.7) brightness(.85);
+  mask-image: linear-gradient(to right, transparent, #000 var(--paper-feather), #000 calc(100% - var(--paper-feather)), transparent), linear-gradient(to bottom, transparent, #000 var(--paper-feather), #000 calc(100% - var(--paper-feather)), transparent);
+  mask-composite: intersect;
+  will-change: transform, opacity;
+}
+.v2-paper-stream-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgb(8 13 21 / 12%), rgb(8 13 21 / 36%) 35%, rgb(8 13 21 / 36%) 65%, rgb(8 13 21 / 12%)), linear-gradient(180deg, rgb(8 13 21 / 36%), transparent 18%, transparent 82%, rgb(8 13 21 / 36%));
+}

@@ -1,0 +1,41 @@
+{
+  "name": "portfolio-vite",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build && node scripts/prepare-pages.mjs",
+    "build:release": "tsc -b && vite build && node scripts/prepare-pages.mjs --production",
+    "build:cloudflare": "npm run lint && npm run test:run -- --maxWorkers=2 && tsc -b && vite build && node scripts/prepare-pages.mjs --cloudflare",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "typecheck": "tsc -b"
+  },
+  "dependencies": {
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource-variable/noto-sans-sc": "^5.3.0",
+    "@paper-design/shaders-react": "0.0.61",
+    "@phosphor-icons/react": "^2.1.10",
+    "animejs": "^4.5.0",
+    "gsap": "^3.15.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.1.0",
+    "jsdom": "^30.0.1",
+    "oxlint": "^1.79.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.2",
+    "vitest": "^5.0.0"
+  }
+}

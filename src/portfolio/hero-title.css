@@ -1,0 +1,21 @@
+/* Selected D: the exact matte silver/blue material from the independent preview.
+   Material lives on the moving inner spans; opening masks/transforms stay intact. */
+.v2-hero h1.v2-frosted-title {
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  filter: drop-shadow(0 1px 0 #e5f1ff38) drop-shadow(0 6px 12px #00091f88);
+}
+.v2-frosted-title [data-opening-title] { color: #d9e6f1; }
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .v2-frosted-title [data-opening-title] {
+    background: linear-gradient(110deg, #d9e6f1 5%, #f2f6fa 27%, #8194ad 48%, #d2dfed 63%, #a7bfd7 82%, #f5f8fa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+@media (forced-colors: active) {
+  .v2-hero h1.v2-frosted-title { filter: none; }
+  .v2-frosted-title [data-opening-title] { background: none; color: CanvasText; }
+}
+@media (prefers-contrast: more) { .v2-frosted-title [data-opening-title] { background: none; color: #eef2f6; } }

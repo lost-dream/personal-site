@@ -1,0 +1,27 @@
+/* Preview-only navigation; the actual practice section keeps its main-site styles. */
+.v2-practice-preview { min-height: 100svh; background: #111822; }
+.v2-practice-preview-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-block: 24px;
+  border-bottom: 1px solid var(--line);
+  color: var(--v2-muted);
+  font-size: 13px;
+}
+.v2-practice-preview-bar a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--text);
+}
+.v2-practice-preview-bar a:hover { color: #9cbcff; }
+.v2-practice-preview-bar a:focus-visible { outline: 2px solid #9cbcff; outline-offset: 4px; }
+@media (width < 600px) {
+  .v2-practice-preview-bar {
+    flex-wrap: wrap;
+    gap: 4px 20px;
+    padding-block: 16px;
+  }
+}

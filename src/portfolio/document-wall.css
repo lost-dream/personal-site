@@ -1,0 +1,45 @@
+.v2-document-stage { position: relative; }
+.v2-document-layers { position: relative; width: 100%; height: 100%; isolation: isolate; }
+.v2-document-layer { position: absolute; inset: 0; mix-blend-mode: plus-lighter; }
+.v2-document-layer[data-phase="waiting"] { opacity: 0; }
+.v2-document-layer[data-phase="incoming"] { animation: v2-document-in var(--document-dissolve-duration) var(--document-dissolve-ease) both; }
+.v2-document-layer[data-phase="outgoing"] { animation: v2-document-out var(--document-dissolve-duration) var(--document-dissolve-ease) both; }
+@keyframes v2-document-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes v2-document-out { from { opacity: 1; } to { opacity: 0; } }
+.portfolio-v2 .v2-document-arrow {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgb(238 242 246 / 20%);
+  background: rgb(238 242 246 / 9%);
+  color: #e1e9f3;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 6px 22px rgb(0 5 18 / 20%);
+  transform: translateY(-50%);
+  transition: background 0.25s, border-color 0.25s;
+}
+.v2-document-arrow.arrow-left { left: -22px; }
+.v2-document-arrow.arrow-right { right: -22px; }
+.portfolio-v2 .v2-document-arrow:active { transform: translateY(-50%) scale(0.96); }
+.v2-document-arrow:hover { background: rgb(238 242 246 / 18%); border-color: rgb(238 242 246 / 38%); }
+.v2-document-arrow:focus-visible { outline: 2px solid #9cbcff; outline-offset: 4px; }
+.v2-document-arrow:disabled { opacity: 0.45; cursor: default; }
+.v2-document-announcement { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (width < 768px) {
+  .v2-document-arrow.arrow-left { left: -18px; }
+  .v2-document-arrow.arrow-right { right: -18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .v2-document-layer { animation: none !important; }
+  .v2-document-layer[data-phase="outgoing"] { opacity: 0; }
+  .v2-document-layer[data-phase="incoming"] { opacity: 1; }
+}
+@media (prefers-reduced-transparency: reduce) { .portfolio-v2 .v2-document-arrow { background: #202a39; backdrop-filter: none; } }
+@media (forced-colors: active) { .portfolio-v2 .v2-document-arrow { border: 1px solid ButtonText; color: ButtonText; background: ButtonFace; } }
