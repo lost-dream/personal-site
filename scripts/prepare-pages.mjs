@@ -33,6 +33,7 @@ if (production) {
   html = html.replace('</head>', `  <link rel="canonical" href="${site.origin}/" />\n    <meta property="og:url" content="${site.origin}/" />\n  </head>`);
   await writeFile(join(output, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${site.origin}/sitemap.xml\n`);
   await writeFile(join(output, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${site.origin}/</loc></url></urlset>\n`);
+  await writeFile(join(output, '_redirects'), `https://chishuxiao-personal-site.pages.dev/* ${site.origin}/:splat 301\n`);
 }
 await writeFile(join(output, 'index.html'), html);
 await writeFile(join(output, '_headers'), `/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n${production ? '' : '  X-Robots-Tag: noindex, nofollow\n'}/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n/media/*\n  Cache-Control: public, max-age=3600\n/\n  Cache-Control: public, max-age=0, must-revalidate\n/index.html\n  Cache-Control: public, max-age=0, must-revalidate\n`);
