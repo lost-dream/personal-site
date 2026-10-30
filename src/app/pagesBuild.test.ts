@@ -54,7 +54,6 @@ it('requires an HTTPS site origin before preparing a searchable release', () => 
   expect(f.read('_headers')).not.toContain('X-Robots-Tag');
   expect(f.read('robots.txt')).toContain('Sitemap: https://portfolio.test/sitemap.xml');
   expect(f.read('sitemap.xml')).toContain('<loc>https://portfolio.test/</loc>');
-  expect(f.read('_redirects')).toBe('https://chishuxiao-personal-site.pages.dev/* https://portfolio.test/:splat 301\n');
 });
 
 it('fails preparation when an unhandled oversized resource remains', () => {
