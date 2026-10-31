@@ -13,6 +13,14 @@ import "./photo-tunnel.css";
 
 const config = heroEffects.tunnel;
 export const tunnelMotionKey = "csy:tunnel-motion:v1";
+export const tunnelSpeedKey = "csy:tunnel-speed:v1";
+function readSpeedPercent() {
+  try {
+    const saved = Number(localStorage.getItem(tunnelSpeedKey));
+    if (Number.isInteger(saved) && saved >= 10 && saved <= 300 && saved % 10 === 0) return saved;
+  } catch { /* Storage is optional. */ }
+  return 100;
+}
 type MotionChoice = "system" | "play" | "pause";
 function readMotionChoice(): MotionChoice {
   try {
@@ -49,6 +57,8 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [motionChoice, setMotionChoice] = useState<MotionChoice>(readMotionChoice);
+  const [speedPercent, setSpeedPercent] = useState(readSpeedPercent);
+  const speed = useRef(speedPercent);
   const openingReady = useOpeningReady(root);
   const reduced = useReducedMotion();
   const reducedData = useReducedData();
@@ -58,6 +68,14 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
   const chooseMotion = (choice: MotionChoice) => {
     setMotionChoice(choice);
     try { localStorage.setItem(tunnelMotionKey, choice); } catch { /* Optional persistence. */ }
+  };
+  const adjustSpeed = (delta: number) => {
+    const next = Math.max(10, Math.min(300, speed.current + delta));
+    speed.current = next;
+    setSpeedPercent(next);
+    setHovered(false);
+    setFocused(false);
+    try { localStorage.setItem(tunnelSpeedKey, String(next)); } catch { /* Optional persistence. */ }
   };
   const sceneVisible = useSceneVisibility(root);
   const active = sceneVisible && !suspended && openingReady;
@@ -80,9 +98,9 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
         item.exitStart = null;
       }
       const untilExit = (item.ordinal + 1) * config.depthGap - progress;
-      const speed = Math.max(config.autoSpeed, velocity);
-      if (placement.slot === 0 && velocity > 0.01 && untilExit <= speed * config.exitDuration && item.exitStart === null)
-        item.exitStart = seconds - Math.max(0, config.exitDuration - untilExit / speed);
+      const exitSpeed = Math.max(config.autoSpeed * (compact ? speed.current / 100 : 1), velocity);
+      if (placement.slot === 0 && velocity > 0.01 && untilExit <= exitSpeed * config.exitDuration && item.exitStart === null)
+        item.exitStart = seconds - Math.max(0, config.exitDuration - untilExit / exitSpeed);
       const arrive = item.entryStart === null ? 1 : item.entryFrom +
         (1 - item.entryFrom) * fadeProgress(seconds - item.entryStart, config.entryDuration);
       const depart = item.exitStart === null ? 1 : 1 - fadeProgress(seconds - item.exitStart, config.exitDuration);
@@ -94,7 +112,7 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
     });
     galaxy.current?.paint(progress, clock.current.seconds);
     stage.current?.setAttribute("data-travel", progress.toFixed(1));
-  }, [still]);
+  }, [still, compact]);
 
   const collect = useCallback(() => {
     if (!stage.current) return;
@@ -174,7 +192,7 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
       const seconds = Math.max(0, Math.min((now - last) / 1000, 0.05));
       last = now;
       clock.current.seconds += seconds;
-      if (!hovered && !focused) camera.current.target += config.autoSpeed * seconds;
+      if (!hovered && !focused) camera.current.target += config.autoSpeed * (compact ? speed.current / 100 : 1) * seconds;
       const alpha = 1 - (1 - config.smoothing) ** (seconds * 60);
       const previousPosition = camera.current.position;
       camera.current.position += (camera.current.target - camera.current.position) * alpha;
@@ -191,7 +209,7 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
     return () => {
       cancelAnimationFrame(frame);
     };
-  }, [active, still, photos.length, hovered, focused, paint, lowResolution]);
+  }, [active, still, photos.length, hovered, focused, paint, lowResolution, compact]);
 
   const cssVariables = {
     "--tunnel-feather": `${config.feather}px`,
@@ -230,16 +248,21 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
         })}
         {!photos.length && <p className="v2-empty">首页照片待补充。</p>}
       </div>
-      {(reduced || motionChoice !== "system") && <div className="v2-tunnel-playback" aria-label="纵深影像播放">
-        <button type="button" onClick={() => travel(-config.depthGap * count)} aria-label="查看上一组隧道照片">上一组</button>
+      {(compact || reduced || motionChoice !== "system") && <div className="v2-tunnel-playback" aria-label="纵深影像播放">
+        {compact ? <button type="button" onClick={() => adjustSpeed(10)} disabled={speedPercent >= 300} aria-label="加速10%">加速</button>
+          : <button type="button" onClick={() => travel(-config.depthGap * count)} aria-label="查看上一组隧道照片">上一组</button>}
         <button type="button" className="v2-tunnel-play-toggle" aria-pressed={!still}
+          aria-label={still ? "播放纵深隧道" : "暂停纵深隧道"}
           onClick={() => { chooseMotion(still ? "play" : "pause"); setHovered(false); setFocused(false); }}>
           {still ? "播放纵深隧道" : "暂停纵深隧道"}
+          {compact && <span className="v2-tunnel-speed" aria-hidden="true">{speedPercent}%</span>}
         </button>
-        <button type="button" onClick={() => travel(config.depthGap * count)} aria-label="查看下一组隧道照片">下一组</button>
+        {compact ? <button type="button" onClick={() => adjustSpeed(-10)} disabled={speedPercent <= 10} aria-label="减速10%">减速</button>
+          : <button type="button" onClick={() => travel(config.depthGap * count)} aria-label="查看下一组隧道照片">下一组</button>}
+        {compact && <output className="v2-tunnel-accessible-hint" aria-label="当前隧道速度" aria-live="polite">{speedPercent}%</output>}
       </div>}
       <p id={`${id}-hint`} className="v2-tunnel-accessible-hint">
-        {still ? "纵深照片静止展示，可切换上一组、下一组，或点按播放。点击图片放大。" : "上滑或上方向键前进，下滑或下方向键后退。悬停或聚焦暂停自动推进，移开鼠标后继续。点击图片放大。"}
+        {compact ? "点按播放或暂停纵深隧道。加速、减速每次调整10个百分点。点击图片放大。" : still ? "纵深照片静止展示，可切换上一组、下一组，或点按播放。点击图片放大。" : "上滑或上方向键前进，下滑或下方向键后退。悬停或聚焦暂停自动推进，移开鼠标后继续。点击图片放大。"}
       </p>
     </div>
   );

@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { PhotoTunnel, tunnelMotionKey } from "./PhotoTunnel";
+import { PhotoTunnel, tunnelMotionKey, tunnelSpeedKey } from "./PhotoTunnel";
 import { heroEffects } from "./hero-effects.config";
 
 const photos = Array.from({ length: 30 }, (_, i) => ({ id: `photo-${i}`, title: `照片 ${i}`, src: `/full-${i}.webp`, thumbnail: `/thumb-${i}.webp`, mobileThumbnail: `/mobile-${i}.webp`, width: 1200, height: 1600 }));
@@ -13,6 +13,7 @@ const readTravel = () => Number(screen.getByLabelText("螺旋照片隧道").getA
 
 beforeEach(() => {
   localStorage.removeItem(tunnelMotionKey);
+  localStorage.removeItem(tunnelSpeedKey);
   now = performance.now();
   vi.spyOn(performance, "now").mockImplementation(() => now);
   vi.stubGlobal("requestAnimationFrame", vi.fn((callback: FrameRequestCallback) => { nextFrame = callback; return 1; }));
@@ -24,9 +25,67 @@ beforeEach(() => {
     disconnect() {}
   });
 });
-afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); localStorage.removeItem(tunnelMotionKey); });
+afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); localStorage.removeItem(tunnelMotionKey); localStorage.removeItem(tunnelSpeedKey); });
 
 describe("photo tunnel interaction", () => {
+  it("changes actual mobile travel by ten percentage points per click without jumping, and remembers the speed", () => {
+    const original = window.matchMedia;
+    vi.spyOn(window, "matchMedia").mockImplementation(query => ({ ...original(query), matches: query.includes("max-width") }));
+    const firstRender = render(<PhotoTunnel photos={photos} onView={() => {}} />);
+    expect(screen.queryByRole("button", { name: "查看下一组隧道照片" })).not.toBeInTheDocument();
+    expect(screen.getByLabelText("当前隧道速度")).toHaveTextContent("100%");
+    advance(180);
+    const position = readTravel();
+    fireEvent.click(screen.getByRole("button", { name: "加速10%" }));
+    expect(readTravel()).toBe(position);
+    expect(screen.getByLabelText("当前隧道速度")).toHaveTextContent("110%");
+    advance(120);
+    const fast = readTravel();
+    advance(60);
+    expect(readTravel() - fast).toBeCloseTo(132, 0);
+    fireEvent.click(screen.getByRole("button", { name: "加速10%" }));
+    expect(screen.getByLabelText("当前隧道速度")).toHaveTextContent("120%");
+    advance(120);
+    const faster = readTravel();
+    advance(60);
+    expect(readTravel() - faster).toBeCloseTo(144, 0);
+    fireEvent.click(screen.getByRole("button", { name: "减速10%" }));
+    expect(screen.getByLabelText("当前隧道速度")).toHaveTextContent("110%");
+    expect(localStorage.getItem(tunnelSpeedKey)).toBe("110");
+    firstRender.unmount();
+    render(<PhotoTunnel photos={photos} onView={() => {}} />);
+    expect(screen.getByLabelText("当前隧道速度")).toHaveTextContent("110%");
+  });
+  it("bounds mobile speed without allowing zero or negative travel", () => {
+    const original = window.matchMedia;
+    vi.spyOn(window, "matchMedia").mockImplementation(query => ({ ...original(query), matches: query.includes("max-width") }));
+    render(<PhotoTunnel photos={photos} onView={() => {}} />);
+    for (let i = 0; i < 25; i++) fireEvent.click(screen.getByRole("button", { name: "加速10%" }));
+    expect(screen.getByRole("button", { name: "加速10%" })).toBeDisabled();
+    expect(screen.getByLabelText("当前隧道速度")).toHaveTextContent("300%");
+    for (let i = 0; i < 35; i++) fireEvent.click(screen.getByRole("button", { name: "减速10%" }));
+    expect(screen.getByRole("button", { name: "减速10%" })).toBeDisabled();
+    expect(screen.getByLabelText("当前隧道速度")).toHaveTextContent("10%");
+  });
+  it("can adjust speed while paused or storage is blocked without starting motion", () => {
+    const original = window.matchMedia;
+    vi.spyOn(window, "matchMedia").mockImplementation(query => ({ ...original(query), matches: query.includes("max-width") || query.includes("prefers-reduced-motion") }));
+    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => { throw new Error("Blocked"); });
+    render(<PhotoTunnel photos={photos} onView={() => {}} />);
+    fireEvent.click(screen.getByRole("button", { name: "加速10%" }));
+    expect(screen.getByLabelText("当前隧道速度")).toHaveTextContent("110%");
+    expect(screen.getByRole("region", { name: "首页照片墙" })).toHaveAttribute("data-motion", "paused");
+    expect(requestAnimationFrame).not.toHaveBeenCalled();
+  });
+  it("keeps desktop travel at the original speed even when a mobile speed is saved", () => {
+    localStorage.setItem(tunnelSpeedKey, "200");
+    render(<PhotoTunnel photos={photos} onView={() => {}} />);
+    expect(screen.queryByRole("button", { name: "加速10%" })).not.toBeInTheDocument();
+    advance(180);
+    const start = readTravel();
+    advance(60);
+    expect(readTravel() - start).toBeCloseTo(120, 0);
+  });
   it.each(["max-width", "prefers-reduced-data"])("keeps depth motion with small images for %s", (preference) => {
     const original = window.matchMedia;
     vi.spyOn(window, "matchMedia").mockImplementation(query => ({ ...original(query), matches: query.includes(preference) }));
