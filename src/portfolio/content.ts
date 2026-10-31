@@ -13,6 +13,7 @@ export type Photo = {
   hlsSrc?: string;
   mobileHlsSrc?: string;
   thumbnail?: string;
+  mobileThumbnail?: string;
   alt?: string;
   kind?: "image" | "video";
   poster?: string;
@@ -102,6 +103,7 @@ export const portfolioContent: PortfolioContent = {
       title: `首页照片 ${number}`,
       src: `${import.meta.env.BASE_URL}media/hero-tunnel/${photo.file}`,
       thumbnail: `${import.meta.env.BASE_URL}media/hero-tunnel/${photo.thumbnail}`,
+      mobileThumbnail: `${import.meta.env.BASE_URL}media/hero-tunnel/${photo.mobileThumbnail}`,
       width: photo.width,
       height: photo.height,
       alt: `池树孝的影像档案：${photo.source.replace(/\.[^.]+$/, "")}`,

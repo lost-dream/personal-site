@@ -8,6 +8,7 @@ import { heroEffects } from "./hero-effects.config";
 import { fadeProgress, projectTunnel, wheelTravel, wrapPhotoIndex } from "./tunnelGeometry";
 import { useSceneVisibility } from "./useSceneVisibility";
 import { useOpeningReady } from "./useOpeningReady";
+import { useCompactTunnel } from "./useCompactTunnel";
 import "./photo-tunnel.css";
 
 const config = heroEffects.tunnel;
@@ -41,12 +42,15 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
   const openingReady = useOpeningReady(root);
   const reduced = useReducedMotion();
   const reducedData = useReducedData();
-  const staticMode = reduced || reducedData;
+  const compact = useCompactTunnel();
+  const lowResolution = compact || reducedData;
+  const staticMode = reduced;
   const sceneVisible = useSceneVisibility(root);
   const active = sceneVisible && !suspended && openingReady;
   const id = useId();
   // Native, lazy-loaded scrolling keeps the full archive reachable without
-  // adding navigation tools when motion or data saving is requested.
+  // adding navigation tools when reduced motion is requested. Data saving uses
+  // smaller images while keeping the approved depth animation.
   const count = staticMode ? photos.length : Math.min(config.visibleCount, photos.length);
   const ordinals = Array.from({ length: count }, (_, slot) => staticMode ? slot : first + slot);
 
@@ -116,7 +120,7 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
     paint(camera.current.position);
   }, [photos, staticMode, paint]);
 
-  useLayoutEffect(() => collect(), [collect, first]);
+  useLayoutEffect(() => collect(), [collect, first, lowResolution]);
   useEffect(() => {
     const element = stage.current;
     if (!element || staticMode) return;
@@ -158,6 +162,10 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
     let last = performance.now();
     let lastFirst = Math.floor(camera.current.position / config.depthGap);
     const tick = (now: number) => {
+      if (lowResolution && now - last < 1000 / heroEffects.mobile.tunnelFps - 0.1) {
+        frame = requestAnimationFrame(tick);
+        return;
+      }
       const seconds = Math.max(0, Math.min((now - last) / 1000, 0.05));
       last = now;
       clock.current.seconds += seconds;
@@ -178,7 +186,7 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
     return () => {
       cancelAnimationFrame(frame);
     };
-  }, [active, staticMode, photos.length, hovered, focused, paint]);
+  }, [active, staticMode, photos.length, hovered, focused, paint, lowResolution]);
 
   const cssVariables = {
     "--tunnel-feather": `${config.feather}px`,
@@ -192,7 +200,7 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
   } as CSSProperties;
   return (
     <div ref={root} className="v2-tunnel-region" role="region" aria-label="首页照片墙"
-      style={cssVariables} data-static={staticMode || undefined}
+      style={cssVariables} data-static={staticMode || undefined} data-quality={lowResolution ? "mobile" : "desktop"}
       onPointerEnter={(event) => { if (event.pointerType !== "touch") setHovered(true); }}
       onPointerLeave={() => setHovered(false)}
       onFocusCapture={() => setFocused(true)}
@@ -207,12 +215,12 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
           }
         }}>
         <div className="v2-tunnel-atmosphere" aria-hidden="true" />
-        {!staticMode && <GalaxyTrail ref={galaxy} />}
+        {!staticMode && <GalaxyTrail ref={galaxy} lowResolution={lowResolution} />}
         {ordinals.map((ordinal) => {
           const photo = photos[wrapPhotoIndex(ordinal, photos.length)];
           return <button key={ordinal} type="button" className="v2-tunnel-photo" data-ordinal={ordinal}
             aria-label={`放大查看${photo.title}`} onClick={() => onView(photo)}>
-            <Media photo={{ ...photo, src: photo.thumbnail || photo.src }} contain eager={!staticMode} />
+            <Media photo={{ ...photo, src: (lowResolution && photo.mobileThumbnail) || photo.thumbnail || photo.src }} contain eager={!staticMode} />
           </button>;
         })}
         {!photos.length && <p className="v2-empty">首页照片待补充。</p>}

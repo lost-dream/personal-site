@@ -35,13 +35,18 @@ export function PortfolioPage() {
     setMenu(false);
     queueMicrotask(() => menuButton.current?.focus());
   }, []);
-  useV2Motion(root);
+  const openingRemaining = useV2Motion(root);
   const content = portfolioContent;
   return (
     <div className="portfolio-v2 v2-main-site" ref={root} data-opening="pending">
-      <div className="v2-glass-opening" aria-hidden="true">
-        <div className="v2-glass-shutter shutter-left" />
-        <div className="v2-glass-shutter shutter-right" />
+      <div className="v2-glass-opening">
+        <div className="v2-glass-shutter shutter-left" aria-hidden="true" />
+        <div className="v2-glass-shutter shutter-right" aria-hidden="true" />
+        <div className="v2-opening-countdown" role="timer" aria-label="网站开启倒计时" aria-live="off">
+          <p className="v2-opening-label">池树孝 · 个人档案</p>
+          <span className="v2-opening-seconds">{String(openingRemaining).padStart(2, "0")}<small>s</small></span>
+          <p className="v2-opening-caption">稍候，影像即将开启</p>
+        </div>
       </div>
       <a className="skip-link" href="#main">
         跳到主要内容

@@ -10,6 +10,33 @@
 }
 
 .v2-glass-opening { display: none; }
+/* Visible from the first React frame; no deferred animation dependency. */
+.portfolio-v2:is([data-opening="pending"], [data-opening="holding"], [data-opening="playing"]) .v2-glass-opening {
+  display: grid;
+  place-items: center;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  pointer-events: auto;
+  background: rgb(15 23 34 / 86%);
+  -webkit-backdrop-filter: blur(20px) saturate(0.65);
+  backdrop-filter: blur(20px) saturate(0.65);
+  animation: v2-opening-safety-release 9.4s steps(1, end) both;
+}
+.v2-opening-countdown { position: relative; z-index: 1; text-align: center; color: #edf2f8; transition: opacity 0.18s ease-out; }
+.v2-opening-label { margin: 0 0 28px; font-size: 13px; letter-spacing: 0.14em; color: #b9c6d6; }
+.v2-opening-seconds { font-family: ui-monospace, monospace; font-size: clamp(76px, 12vw, 112px); font-weight: 300; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.08em; }
+.v2-opening-seconds small { margin-left: 12px; font-size: 18px; letter-spacing: 0; color: #9eafc4; }
+.v2-opening-caption { margin: 28px 0 0; font-size: 12px; letter-spacing: 0.1em; color: #9eafc4; }
+.portfolio-v2[data-opening="playing"] .v2-opening-countdown { opacity: 0; }
+@keyframes v2-opening-safety-release { to { visibility: hidden; pointer-events: none; } }
+@media (width < 768px) {
+  .portfolio-v2:is([data-opening="pending"], [data-opening="holding"], [data-opening="playing"]) .v2-glass-opening { -webkit-backdrop-filter: blur(12px) saturate(0.65); backdrop-filter: blur(12px) saturate(0.65); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-v2[data-opening="playing"] .v2-glass-opening { animation: v2-opening-safety-release 1.4s steps(1, end) both; }
+}
 .v2-hero-copy {
   --hero-settle-x: clamp(12px, 3vw, 64px);
   --hero-settle-y: clamp(18px, 2.4vw, 48px);
@@ -23,14 +50,11 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) .v2-glass-opening {
-    display: block;
-    position: fixed;
-    inset: 0;
-    z-index: 30;
-    overflow: hidden;
-    pointer-events: none;
-    animation: v2-glass-dismiss 1.2s steps(1, end) both;
+  .portfolio-v2[data-opening="playing"] .v2-glass-opening {
+    background: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    animation: v2-glass-dismiss 1.4s steps(1, end) both;
   }
   .v2-glass-shutter {
     --shutter-feather: clamp(24px, 3vw, 64px);
@@ -38,43 +62,47 @@
     inset-block: 0;
     width: calc(50% + 1px);
     background: linear-gradient(135deg, rgb(174 196 213 / 17%), rgb(12 20 31 / 80%));
-    backdrop-filter: blur(16px) saturate(0.65);
     -webkit-backdrop-filter: blur(16px) saturate(0.65);
+    backdrop-filter: blur(16px) saturate(0.65);
     box-shadow: inset 0 0 70px rgb(255 255 255 / 3%);
   }
   .shutter-left {
     left: 0;
     mask-image: linear-gradient(to right, black calc(100% - var(--shutter-feather)), transparent);
     -webkit-mask-image: linear-gradient(to right, black calc(100% - var(--shutter-feather)), transparent);
+  }
+  .portfolio-v2[data-opening="playing"] .shutter-left {
     animation: v2-glass-left 1.05s 0.08s cubic-bezier(0.76, 0, 0.24, 1) both;
   }
   .shutter-right {
     right: 0;
     mask-image: linear-gradient(to left, black calc(100% - var(--shutter-feather)), transparent);
     -webkit-mask-image: linear-gradient(to left, black calc(100% - var(--shutter-feather)), transparent);
+  }
+  .portfolio-v2[data-opening="playing"] .shutter-right {
     animation: v2-glass-right 1.05s 0.08s cubic-bezier(0.76, 0, 0.24, 1) both;
   }
-  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) [data-opening-title] {
+  .portfolio-v2[data-opening="playing"] [data-opening-title] {
     animation: v2-glass-title 0.85s 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
     transform-origin: left center;
   }
-  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) .v2-title-mask:nth-child(2) [data-opening-title] { animation-delay: 0.28s; }
-  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) [data-opening-copy] {
+  .portfolio-v2[data-opening="playing"] .v2-title-mask:nth-child(2) [data-opening-title] { animation-delay: 0.28s; }
+  .portfolio-v2[data-opening="playing"] [data-opening-copy] {
     animation: v2-glass-copy 0.7s 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
-  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) .v2-identity { animation-delay: 0.4s; }
-  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) .v2-contact-shell { animation-delay: 0.45s; }
-  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) [data-opening-nav] {
+  .portfolio-v2[data-opening="playing"] .v2-identity { animation-delay: 0.4s; }
+  .portfolio-v2[data-opening="playing"] .v2-contact-shell { animation-delay: 0.45s; }
+  .portfolio-v2[data-opening="playing"] [data-opening-nav] {
     animation: v2-glass-copy 0.65s 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
-  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) [data-v2-opening-gallery] {
+  .portfolio-v2[data-opening="playing"] [data-v2-opening-gallery] {
     animation: v2-glass-gallery 0.95s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
   /* Outer blocks own this second movement; child entrance transforms stay independent. */
-  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) .v2-hero-lead {
+  .portfolio-v2[data-opening="playing"] .v2-hero-lead {
     animation: v2-hero-settle-up var(--hero-settle-duration) var(--hero-settle-delay) var(--hero-settle-ease) both;
   }
-  .portfolio-v2:is([data-opening="pending"], [data-opening="playing"]) .v2-hero-contact-block {
+  .portfolio-v2[data-opening="playing"] .v2-hero-contact-block {
     animation: v2-hero-settle-down var(--hero-settle-duration) var(--hero-settle-delay) var(--hero-settle-ease) both;
   }
   .portfolio-v2[data-opening="complete"] .v2-hero-lead {
@@ -108,5 +136,14 @@
   }
 }
 @media (prefers-reduced-transparency: reduce) {
-  .v2-glass-shutter { background: #141e2a; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .v2-glass-shutter { background: #141e2a; -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .portfolio-v2[data-opening="playing"] .v2-glass-opening { -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .portfolio-v2:is([data-opening="pending"], [data-opening="holding"]) .v2-glass-opening { background: #141e2a; -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+
+.portfolio-v2:is([data-opening="pending"], [data-opening="holding"]) .v2-glass-shutter { visibility: hidden; }

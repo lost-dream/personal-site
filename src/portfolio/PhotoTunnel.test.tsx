@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { PhotoTunnel } from "./PhotoTunnel";
 import { heroEffects } from "./hero-effects.config";
 
-const photos = Array.from({ length: 30 }, (_, i) => ({ id: `photo-${i}`, title: `照片 ${i}`, src: `/full-${i}.webp`, thumbnail: `/thumb-${i}.webp`, width: 1200, height: 1600 }));
+const photos = Array.from({ length: 30 }, (_, i) => ({ id: `photo-${i}`, title: `照片 ${i}`, src: `/full-${i}.webp`, thumbnail: `/thumb-${i}.webp`, mobileThumbnail: `/mobile-${i}.webp`, width: 1200, height: 1600 }));
 let nextFrame: FrameRequestCallback;
 let now: number;
 const advance = (frames = 90) => act(() => {
@@ -26,6 +26,22 @@ beforeEach(() => {
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
 describe("photo tunnel interaction", () => {
+  it.each(["max-width", "prefers-reduced-data"])("keeps depth motion with small images for %s", (preference) => {
+    const original = window.matchMedia;
+    vi.spyOn(window, "matchMedia").mockImplementation(query => ({ ...original(query), matches: query.includes(preference) }));
+    const onView = vi.fn();
+    render(<PhotoTunnel photos={photos} onView={onView} />);
+    const region = screen.getByRole("region", { name: "首页照片墙" });
+    expect(region).not.toHaveAttribute("data-static");
+    expect(region).toHaveAttribute("data-quality", "mobile");
+    expect(screen.getAllByRole("img")[0]).toHaveAttribute("src", "/mobile-0.webp");
+    expect(region.querySelectorAll(".v2-tunnel-photo")).toHaveLength(20);
+    expect(region.querySelectorAll("canvas")).toHaveLength(2);
+    advance();
+    expect(readTravel()).toBeGreaterThan(100);
+    fireEvent.click(screen.getAllByRole("button", { name: /放大查看照片/ })[0]);
+    expect(onView).toHaveBeenCalledWith(expect.objectContaining({ src: expect.stringMatching(/^\/full-/) }));
+  });
   it("has no visible tools and applies the requested image treatment", () => {
     render(<PhotoTunnel photos={photos} onView={() => {}} />);
     const region = screen.getByRole("region", { name: "首页照片墙" });

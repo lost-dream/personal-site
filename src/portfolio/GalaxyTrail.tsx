@@ -25,7 +25,7 @@ const colorAt = (rank: number) => rank > 14 ? settings.colors.gold : rank > 7 ? 
 export type GalaxyController = { resize: (width: number, height: number) => void; paint: (progress: number, seconds: number) => void };
 
 /** The approved two-canvas galaxy, sharing PhotoTunnel's clock (no extra rAF). */
-export const GalaxyTrail = forwardRef<GalaxyController>(function GalaxyTrail(_, ref) {
+export const GalaxyTrail = forwardRef<GalaxyController, { lowResolution?: boolean }>(function GalaxyTrail({ lowResolution = false }, ref) {
   const field = useRef<HTMLCanvasElement>(null);
   const stream = useRef<HTMLCanvasElement>(null);
   const state = useRef({ factorX: 1, factorY: 1, ratio: 1, lastStars: -Infinity,
@@ -82,9 +82,10 @@ export const GalaxyTrail = forwardRef<GalaxyController>(function GalaxyTrail(_, 
         const data = state.current;
         data.factorX = width / widthBase;
         data.factorY = height / heightBase;
-        data.compact = width < 768;
-        const budget = data.compact ? 220000 : settings.maxPixelCount;
-        data.ratio = Math.min(settings.maxPixelRatio, Math.sqrt(budget / (width * height)));
+        data.compact = lowResolution;
+        const budget = data.compact ? heroEffects.mobile.galaxyMaxPixelCount : settings.maxPixelCount;
+        const maxRatio = data.compact ? heroEffects.mobile.galaxyMaxPixelRatio : settings.maxPixelRatio;
+        data.ratio = Math.min(maxRatio, Math.sqrt(budget / (width * height)));
         for (const canvas of [field.current, stream.current]) {
           canvas.width = Math.max(1, Math.floor(width * data.ratio));
           canvas.height = Math.max(1, Math.floor(height * data.ratio));
@@ -96,7 +97,7 @@ export const GalaxyTrail = forwardRef<GalaxyController>(function GalaxyTrail(_, 
       },
       paint(progress, seconds) {
         const data = state.current;
-        if (seconds - data.lastStars < 1 / (data.compact ? 20 : settings.fps)) return;
+        if (seconds - data.lastStars < 1 / (data.compact ? heroEffects.mobile.galaxyFps : settings.fps)) return;
         data.lastStars = seconds;
         const ctx = prepare(data.streamContext);
         if (!ctx) return;
@@ -111,7 +112,7 @@ export const GalaxyTrail = forwardRef<GalaxyController>(function GalaxyTrail(_, 
         ctx.globalAlpha = 1;
       },
     };
-  }, []);
+  }, [lowResolution]);
   return <>
     <div className="v2-galaxy-halo" aria-hidden="true" />
     <canvas ref={field} className="v2-galaxy-field" aria-hidden="true" />

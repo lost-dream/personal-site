@@ -39,6 +39,13 @@ export const heroEffects = {
     maxPixelRatio: 1.25,
     colors: { blue: "#a7c8ff", violet: "#b5a0df", gold: "#f0d3a3", core: "#d4b5de" },
   },
+  mobile: {
+    thumbnailMaxEdge: 360, // 手机照片副本最长边；生成脚本使用同样的值
+    tunnelFps: 30,
+    galaxyFps: 15,
+    galaxyMaxPixelCount: 90000, // 每层画布约 300×300 像素，保留 CSS 显示尺寸
+    galaxyMaxPixelRatio: 0.8,
+  },
   border: {
     speed: 0.4,
     radius: 30,

@@ -1,26 +1,10 @@
-import { useEffect, useLayoutEffect, type RefObject } from "react";
+import { useEffect, type RefObject } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-
-export const openingStorageKey = "csy:opening-seen:v1";
-export const openingDuration = 1400;
+import { useGlassOpening } from "./useGlassOpening";
 
 export function useV2Motion(root: RefObject<HTMLDivElement | null>) {
   const reduced = useReducedMotion();
-  useLayoutEffect(() => {
-    const element = root.current;
-    if (!element) return;
-    // CSS owns the first frame, independently of deferred animation downloads.
-    // Its keyframes end in visible content even if this cleanup timer is delayed.
-    let seen = false;
-    try { seen = localStorage.getItem(openingStorageKey) === "1"; } catch { /* Storage is optional. */ }
-    element.setAttribute("data-opening", reduced || seen ? "complete" : "playing");
-    if (reduced || seen) return;
-    const timer = window.setTimeout(() => {
-      element.setAttribute("data-opening", "complete");
-      try { localStorage.setItem(openingStorageKey, "1"); } catch { /* Still show the content. */ }
-    }, openingDuration);
-    return () => window.clearTimeout(timer);
-  }, [reduced, root]);
+  const remaining = useGlassOpening(root);
   useEffect(() => {
     const element = root.current;
     if (!element || reduced) return;
@@ -97,4 +81,5 @@ export function useV2Motion(root: RefObject<HTMLDivElement | null>) {
       }
     };
   }, [reduced, root]);
+  return remaining;
 }
