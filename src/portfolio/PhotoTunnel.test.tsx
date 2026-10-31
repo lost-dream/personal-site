@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { PhotoTunnel } from "./PhotoTunnel";
+import { PhotoTunnel, tunnelMotionKey } from "./PhotoTunnel";
 import { heroEffects } from "./hero-effects.config";
 
 const photos = Array.from({ length: 30 }, (_, i) => ({ id: `photo-${i}`, title: `照片 ${i}`, src: `/full-${i}.webp`, thumbnail: `/thumb-${i}.webp`, mobileThumbnail: `/mobile-${i}.webp`, width: 1200, height: 1600 }));
@@ -12,6 +12,7 @@ const advance = (frames = 90) => act(() => {
 const readTravel = () => Number(screen.getByLabelText("螺旋照片隧道").getAttribute("data-travel"));
 
 beforeEach(() => {
+  localStorage.removeItem(tunnelMotionKey);
   now = performance.now();
   vi.spyOn(performance, "now").mockImplementation(() => now);
   vi.stubGlobal("requestAnimationFrame", vi.fn((callback: FrameRequestCallback) => { nextFrame = callback; return 1; }));
@@ -23,7 +24,7 @@ beforeEach(() => {
     disconnect() {}
   });
 });
-afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); });
+afterEach(() => { vi.restoreAllMocks(); vi.unstubAllGlobals(); localStorage.removeItem(tunnelMotionKey); });
 
 describe("photo tunnel interaction", () => {
   it.each(["max-width", "prefers-reduced-data"])("keeps depth motion with small images for %s", (preference) => {
@@ -107,16 +108,44 @@ describe("photo tunnel interaction", () => {
     fireEvent.click(visiblePhoto);
     expect(onView).toHaveBeenCalledWith(expect.objectContaining({ src: expect.stringMatching(/^\/full-/) }));
   });
-  it("uses a static gallery for reduced motion without intercepting wheel scroll", () => {
+  it("preserves depth with no automatic motion and lets reduced-motion visitors reach the archive", () => {
     vi.spyOn(window, "matchMedia").mockImplementation((query) => ({ matches: query.includes("prefers-reduced-motion"), media: query, addEventListener() {}, removeEventListener() {} }) as unknown as MediaQueryList);
     render(<PhotoTunnel photos={photos} onView={() => {}} />);
-    expect(screen.getByRole("region", { name: "首页照片墙" })).toHaveAttribute("data-static", "true");
-    expect(screen.getAllByRole("button", { name: /放大查看照片/ })).toHaveLength(photos.length);
-    expect(screen.queryByRole("button", { name: "暂停照片隧道自动推进" })).not.toBeInTheDocument();
+    const region = screen.getByRole("region", { name: "首页照片墙" });
+    expect(region).toHaveAttribute("data-motion", "paused");
+    expect(region).not.toHaveAttribute("data-static");
+    expect(screen.getAllByRole("button", { name: /放大查看照片/ })).toHaveLength(20);
+    expect((region.querySelector(".v2-tunnel-photo") as HTMLElement).style.transform).toContain("translate3d");
+    expect(requestAnimationFrame).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "查看下一组隧道照片" }));
     expect(screen.getByRole("button", { name: "放大查看照片 29" })).toBeInTheDocument();
-    expect(screen.getAllByRole("img")[0]).toHaveAttribute("loading", "lazy");
+    expect(Number((region.querySelector(".v2-tunnel-photo") as HTMLElement).style.opacity)).toBe(1);
     const wheel = new WheelEvent("wheel", { deltaY: 120, bubbles: true, cancelable: true });
     fireEvent(screen.getByLabelText("螺旋照片隧道"), wheel);
     expect(wheel.defaultPrevented).toBe(false);
+  });
+  it("plays on explicit request despite reduced motion, remembers it, and lets the visitor pause", () => {
+    vi.spyOn(window, "matchMedia").mockImplementation(query => ({ matches: query.includes("prefers-reduced-motion"), media: query, addEventListener() {}, removeEventListener() {} }) as unknown as MediaQueryList);
+    const firstRender = render(<PhotoTunnel photos={photos} onView={() => {}} />);
+    fireEvent.click(screen.getByRole("button", { name: "播放纵深隧道" }));
+    expect(screen.getByRole("region", { name: "首页照片墙" })).toHaveAttribute("data-motion", "playing");
+    advance();
+    expect(readTravel()).toBeGreaterThan(100);
+    expect(localStorage.getItem(tunnelMotionKey)).toBe("play");
+    firstRender.unmount();
+    render(<PhotoTunnel photos={photos} onView={() => {}} />);
+    expect(screen.getByRole("region", { name: "首页照片墙" })).toHaveAttribute("data-motion", "playing");
+    fireEvent.click(screen.getByRole("button", { name: "暂停纵深隧道" }));
+    expect(screen.getByRole("region", { name: "首页照片墙" })).toHaveAttribute("data-motion", "paused");
+    expect(localStorage.getItem(tunnelMotionKey)).toBe("pause");
+    expect(cancelAnimationFrame).toHaveBeenCalled();
+  });
+  it("keeps the playback control usable if storage writes are blocked", () => {
+    vi.spyOn(window, "matchMedia").mockImplementation(query => ({ matches: query.includes("prefers-reduced-motion"), media: query, addEventListener() {}, removeEventListener() {} }) as unknown as MediaQueryList);
+    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => { throw new Error("Blocked"); });
+    render(<PhotoTunnel photos={photos} onView={() => {}} />);
+    fireEvent.click(screen.getByRole("button", { name: "播放纵深隧道" }));
+    advance();
+    expect(readTravel()).toBeGreaterThan(100);
   });
 });

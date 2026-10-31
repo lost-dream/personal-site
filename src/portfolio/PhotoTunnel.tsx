@@ -12,6 +12,15 @@ import { useCompactTunnel } from "./useCompactTunnel";
 import "./photo-tunnel.css";
 
 const config = heroEffects.tunnel;
+export const tunnelMotionKey = "csy:tunnel-motion:v1";
+type MotionChoice = "system" | "play" | "pause";
+function readMotionChoice(): MotionChoice {
+  try {
+    const saved = localStorage.getItem(tunnelMotionKey);
+    if (saved === "play" || saved === "pause") return saved;
+  } catch { /* Private browsing may block storage; the control still works. */ }
+  return "system";
+}
 type CachedPhoto = {
   element: HTMLButtonElement;
   ordinal: number;
@@ -39,20 +48,24 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
   const [first, setFirst] = useState(0);
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
+  const [motionChoice, setMotionChoice] = useState<MotionChoice>(readMotionChoice);
   const openingReady = useOpeningReady(root);
   const reduced = useReducedMotion();
   const reducedData = useReducedData();
   const compact = useCompactTunnel();
   const lowResolution = compact || reducedData;
-  const staticMode = reduced;
+  const still = motionChoice === "pause" || (reduced && motionChoice !== "play");
+  const chooseMotion = (choice: MotionChoice) => {
+    setMotionChoice(choice);
+    try { localStorage.setItem(tunnelMotionKey, choice); } catch { /* Optional persistence. */ }
+  };
   const sceneVisible = useSceneVisibility(root);
   const active = sceneVisible && !suspended && openingReady;
   const id = useId();
-  // Native, lazy-loaded scrolling keeps the full archive reachable without
-  // adding navigation tools when reduced motion is requested. Data saving uses
-  // smaller images while keeping the approved depth animation.
-  const count = staticMode ? photos.length : Math.min(config.visibleCount, photos.length);
-  const ordinals = Array.from({ length: count }, (_, slot) => staticMode ? slot : first + slot);
+  // Motion preference changes playback, never the approved depth composition.
+  // Manual paging keeps the entire archive reachable without mounting it all.
+  const count = Math.min(config.visibleCount, photos.length);
+  const ordinals = Array.from({ length: count }, (_, slot) => first + slot);
 
   const paint = useCallback((progress: number) => {
     const { width, height } = dimensions.current;
@@ -73,7 +86,7 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
       const arrive = item.entryStart === null ? 1 : item.entryFrom +
         (1 - item.entryFrom) * fadeProgress(seconds - item.entryStart, config.entryDuration);
       const depart = item.exitStart === null ? 1 : 1 - fadeProgress(seconds - item.exitStart, config.exitDuration);
-      item.opacity = arrive * depart;
+      item.opacity = still ? 1 : arrive * depart;
       item.element.style.transform = `translate3d(${placement.x}px, ${placement.y}px, 0) translate(-50%, -50%) scale(${placement.scale})`;
       item.element.style.zIndex = String(placement.zIndex);
       item.element.style.opacity = String(item.opacity);
@@ -81,18 +94,10 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
     });
     galaxy.current?.paint(progress, clock.current.seconds);
     stage.current?.setAttribute("data-travel", progress.toFixed(1));
-  }, []);
+  }, [still]);
 
   const collect = useCallback(() => {
     if (!stage.current) return;
-    if (staticMode) {
-      stage.current.querySelectorAll<HTMLButtonElement>(".v2-tunnel-photo").forEach((element) => {
-        for (const property of ["width", "height", "transform", "opacity", "visibility", "z-index"])
-          element.style.removeProperty(property);
-      });
-      cache.current = [];
-      return;
-    }
     const width = stage.current.clientWidth || 760;
     const height = stage.current.clientHeight || 620;
     dimensions.current = { width, height };
@@ -112,18 +117,18 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
       element.style.height = `${photoHeight}px`;
       const old = previous.get(ordinal);
       return { element, ordinal, width: photoWidth, height: photoHeight,
-        opacity: old?.opacity ?? (initialized.current ? 0 : 1),
-        entryStart: old ? old.entryStart : initialized.current ? clock.current.seconds : null,
-        entryFrom: old?.entryFrom ?? 0, exitStart: old?.exitStart ?? null };
+        opacity: still ? 1 : old?.opacity ?? (initialized.current ? 0 : 1),
+        entryStart: still ? null : old ? old.entryStart : initialized.current ? clock.current.seconds : null,
+        entryFrom: old?.entryFrom ?? 0, exitStart: still ? null : old?.exitStart ?? null };
     });
     initialized.current = true;
     paint(camera.current.position);
-  }, [photos, staticMode, paint]);
+  }, [photos, still, paint]);
 
   useLayoutEffect(() => collect(), [collect, first, lowResolution]);
   useEffect(() => {
     const element = stage.current;
-    if (!element || staticMode) return;
+    if (!element) return;
     if (typeof ResizeObserver === "undefined") {
       window.addEventListener("resize", collect);
       return () => window.removeEventListener("resize", collect);
@@ -131,20 +136,20 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
     const observer = new ResizeObserver(collect);
     observer.observe(element);
     return () => observer.disconnect();
-  }, [collect, staticMode]);
+  }, [collect]);
 
   const travel = useCallback((delta: number) => {
     if (suspended || !photos.length) return;
     camera.current.target += delta;
-    if (staticMode || !active) {
+    if (still || !active) {
       camera.current.position = camera.current.target;
       setFirst(Math.floor(camera.current.position / config.depthGap));
-      if (!staticMode) paint(camera.current.position);
+      paint(camera.current.position);
     }
-  }, [suspended, photos.length, staticMode, active, paint]);
+  }, [suspended, photos.length, still, active, paint]);
   useEffect(() => {
     const element = stage.current;
-    if (!element || staticMode) return;
+    if (!element || still) return;
     const onWheel = (event: WheelEvent) => {
       if (!active || event.ctrlKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
       event.preventDefault();
@@ -152,12 +157,12 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
     };
     element.addEventListener("wheel", onWheel, { passive: false });
     return () => element.removeEventListener("wheel", onWheel);
-  }, [active, staticMode, travel]);
+  }, [active, still, travel]);
   useEffect(() => {
     if (!active) camera.current.target = camera.current.position;
   }, [active]);
   useEffect(() => {
-    if (!active || staticMode || !photos.length) return;
+    if (!active || still || !photos.length) return;
     let frame = 0;
     let last = performance.now();
     let lastFirst = Math.floor(camera.current.position / config.depthGap);
@@ -186,7 +191,7 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
     return () => {
       cancelAnimationFrame(frame);
     };
-  }, [active, staticMode, photos.length, hovered, focused, paint, lowResolution]);
+  }, [active, still, photos.length, hovered, focused, paint, lowResolution]);
 
   const cssVariables = {
     "--tunnel-feather": `${config.feather}px`,
@@ -200,33 +205,41 @@ export function PhotoTunnel({ photos, onView, suspended = false }: {
   } as CSSProperties;
   return (
     <div ref={root} className="v2-tunnel-region" role="region" aria-label="首页照片墙"
-      style={cssVariables} data-static={staticMode || undefined} data-quality={lowResolution ? "mobile" : "desktop"}
+      style={cssVariables} data-motion={still ? "paused" : "playing"} data-quality={lowResolution ? "mobile" : "desktop"}
       onPointerEnter={(event) => { if (event.pointerType !== "touch") setHovered(true); }}
       onPointerLeave={() => setHovered(false)}
-      onFocusCapture={() => setFocused(true)}
+      onFocusCapture={(event) => { if (stage.current?.contains(event.target)) setFocused(true); }}
       onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }}>
       <div ref={stage} className="v2-tunnel-stage" tabIndex={0}
         aria-label="螺旋照片隧道" aria-describedby={`${id}-hint`}
         onKeyDown={(event) => {
-          if (staticMode || event.target !== event.currentTarget) return;
+          if (event.target !== event.currentTarget) return;
           if (event.key === "ArrowUp" || event.key === "ArrowDown") {
             event.preventDefault();
             travel(event.key === "ArrowUp" ? config.depthGap : -config.depthGap);
           }
         }}>
         <div className="v2-tunnel-atmosphere" aria-hidden="true" />
-        {!staticMode && <GalaxyTrail ref={galaxy} lowResolution={lowResolution} />}
+        <GalaxyTrail ref={galaxy} lowResolution={lowResolution} />
         {ordinals.map((ordinal) => {
           const photo = photos[wrapPhotoIndex(ordinal, photos.length)];
           return <button key={ordinal} type="button" className="v2-tunnel-photo" data-ordinal={ordinal}
             aria-label={`放大查看${photo.title}`} onClick={() => onView(photo)}>
-            <Media photo={{ ...photo, src: (lowResolution && photo.mobileThumbnail) || photo.thumbnail || photo.src }} contain eager={!staticMode} />
+            <Media photo={{ ...photo, src: (lowResolution && photo.mobileThumbnail) || photo.thumbnail || photo.src }} contain eager />
           </button>;
         })}
         {!photos.length && <p className="v2-empty">首页照片待补充。</p>}
       </div>
+      {(reduced || motionChoice !== "system") && <div className="v2-tunnel-playback" aria-label="纵深影像播放">
+        <button type="button" onClick={() => travel(-config.depthGap * count)} aria-label="查看上一组隧道照片">上一组</button>
+        <button type="button" className="v2-tunnel-play-toggle" aria-pressed={!still}
+          onClick={() => { chooseMotion(still ? "play" : "pause"); setHovered(false); setFocused(false); }}>
+          {still ? "播放纵深隧道" : "暂停纵深隧道"}
+        </button>
+        <button type="button" onClick={() => travel(config.depthGap * count)} aria-label="查看下一组隧道照片">下一组</button>
+      </div>}
       <p id={`${id}-hint`} className="v2-tunnel-accessible-hint">
-        {staticMode ? "滚动浏览照片，点击图片放大。" : "上滑或上方向键前进，下滑或下方向键后退。悬停或聚焦暂停自动推进，移开鼠标后继续。点击图片放大。"}
+        {still ? "纵深照片静止展示，可切换上一组、下一组，或点按播放。点击图片放大。" : "上滑或上方向键前进，下滑或下方向键后退。悬停或聚焦暂停自动推进，移开鼠标后继续。点击图片放大。"}
       </p>
     </div>
   );
