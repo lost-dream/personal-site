@@ -1,0 +1,97 @@
+/* Film → exact freeze frame → live tunnel → photograph background → editorial copy. */
+.v2-cinematic-site[data-opening] > .v2-light-opening {
+  display: grid;
+  place-items: center;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  background: #000;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  animation: none;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.v2-cinematic-site:is([data-opening="pending"], [data-opening="holding"]) > .v2-light-opening {
+  background: rgb(15 23 34 / 94%);
+  -webkit-backdrop-filter: blur(20px) saturate(.65);
+  backdrop-filter: blur(20px) saturate(.65);
+}
+.v2-light-opening .v2-glass-shutter { display: none; }
+.v2-light-screen { position: absolute; inset: 0; background: #000; }
+.v2-light-screen :is(video, img) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+.v2-light-end-frame { opacity: 0; }
+.v2-cinematic-site:is([data-opening="pending"], [data-opening="holding"]) .v2-light-screen { visibility: hidden; }
+.v2-cinematic-site:not([data-opening="holding"]):not([data-opening="pending"]) .v2-opening-countdown { visibility: hidden; opacity: 0; }
+.v2-cinematic-site:is([data-opening="freeze"], [data-opening="tunnel"], [data-opening="handoff"]) .v2-light-screen video { opacity: 0; }
+.v2-cinematic-site:is([data-opening="freeze"], [data-opening="tunnel"], [data-opening="handoff"]) .v2-light-end-frame { opacity: 1; }
+.v2-cinematic-site[data-opening="handoff"] > .v2-light-opening {
+  opacity: 0;
+  transition: opacity var(--light-film-fade, 1100ms) cubic-bezier(.65, 0, .35, 1);
+}
+.v2-cinematic-site[data-opening="playing"] > .v2-light-opening { opacity: 0; visibility: hidden; pointer-events: none; }
+.v2-cinematic-site[data-opening="complete"] > .v2-light-opening { display: none; }
+.v2-light-skip {
+  position: absolute;
+  z-index: 3;
+  right: clamp(24px, 3.4vw, 64px);
+  bottom: clamp(24px, 3.4vw, 48px);
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  min-height: 44px;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: #b9c6d6;
+  font-size: 12px;
+  letter-spacing: .08em;
+}
+.v2-light-skip:hover { color: #fff; }
+.v2-light-skip:focus-visible { outline: 1px solid #d9e6f1; outline-offset: 6px; }
+/* The hero alone rises above the film. Its background and copy remain hidden. */
+.v2-cinematic-site:is([data-opening="tunnel"], [data-opening="handoff"]) > main {
+  position: relative;
+  z-index: 101;
+  pointer-events: none;
+}
+.v2-cinematic-site:not([data-opening="playing"]):not([data-opening="complete"]) :is(.v2-header, .v2-hero-copy) {
+  opacity: 0;
+  visibility: hidden;
+}
+.v2-cinematic-site .v2-hero > .v2-hero-backdrop {
+  transition: opacity var(--light-film-fade, 1100ms) cubic-bezier(.65, 0, .35, 1);
+}
+.v2-cinematic-site:is([data-opening="pending"], [data-opening="holding"], [data-opening="film"], [data-opening="freeze"], [data-opening="tunnel"]) .v2-hero > .v2-hero-backdrop { opacity: 0; }
+.v2-cinematic-site:is([data-opening="pending"], [data-opening="holding"], [data-opening="film"], [data-opening="freeze"]) [data-v2-opening-gallery] {
+  opacity: 0;
+  transform: translate3d(var(--light-tunnel-x, 0px), var(--light-tunnel-y, 0px), 0) scale(calc(var(--light-tunnel-scale, 1) * .94));
+}
+.v2-cinematic-site[data-opening="tunnel"] [data-v2-opening-gallery] {
+  opacity: 1;
+  transform: translate3d(var(--light-tunnel-x, 0px), var(--light-tunnel-y, 0px), 0) scale(var(--light-tunnel-scale, 1));
+  transition: opacity var(--light-tunnel-reveal, 1600ms) cubic-bezier(.16, 1, .3, 1), transform var(--light-tunnel-reveal, 1600ms) cubic-bezier(.16, 1, .3, 1);
+}
+.v2-cinematic-site[data-opening="handoff"] [data-v2-opening-gallery] {
+  opacity: 1;
+  transform: none;
+  transition: transform var(--light-film-fade, 1100ms) cubic-bezier(.65, 0, .35, 1);
+}
+.v2-cinematic-site[data-opening="playing"] [data-v2-opening-gallery] { opacity: 1; transform: none; animation: none; }
+.v2-cinematic-site:is([data-opening="freeze"], [data-opening="tunnel"]) .v2-tunnel-atmosphere { opacity: 0; }
+.v2-cinematic-site .v2-tunnel-atmosphere { transition: opacity var(--light-film-fade, 1100ms) cubic-bezier(.65, 0, .35, 1); }
+.v2-cinematic-site:not([data-opening="complete"]) .v2-tunnel-playback { visibility: hidden; }
+.v2-hero-preview { min-height: 100svh; }
+@media (prefers-reduced-motion: reduce) {
+  .v2-cinematic-site [data-v2-opening-gallery] { transform: none !important; }
+  .v2-cinematic-site [data-v2-opening-gallery], .v2-cinematic-site .v2-hero > .v2-hero-backdrop { transition-duration: 200ms; }
+}

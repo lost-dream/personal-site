@@ -1,4 +1,5 @@
 import { useLayoutEffect, useState, type RefObject } from "react";
+import { installHeroLightOpening } from "./installHeroLightOpening";
 
 export const openingHoldDuration = 8000;
 export const openingRevealDuration = 1400;
@@ -28,6 +29,11 @@ export function useGlassOpening(root: RefObject<HTMLDivElement | null>) {
       document.body.style.overflow = bodyOverflow;
       content.forEach((child, index) => { if (!previouslyInert[index]) child.removeAttribute("inert"); });
     };
+    const film = element.querySelector<HTMLVideoElement>("[data-light-opening-video]");
+    if (film) {
+      const dispose = installHeroLightOpening(element, film, openingHoldDuration, setRemaining, release);
+      return () => { dispose(); release(); };
+    }
     let interval = 0;
     const update = () => {
       const elapsed = Date.now() - start;

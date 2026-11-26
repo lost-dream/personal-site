@@ -11,12 +11,14 @@ import { MediaViewer } from "./MediaViewer";
 import { Works } from "./Works";
 import { WorksPhotoBackground } from "./WorksPhotoBackground";
 import { PracticeGallery } from "./PracticeGallery";
+import { HeroOpening } from "./HeroOpening";
 import { useV2Motion } from "./motion";
 import "./portfolio.css";
 import "./responsive.css";
 import "./hero-enhancements.css";
 import "./glass-opening.css";
 import "./hero-title.css";
+import "./hero-light-opening.css";
 
 const ids = ["home", "experience", "projects", "practice"];
 const navigation = [
@@ -25,7 +27,7 @@ const navigation = [
   ["practice", "热爱与实践"],
 ] as const;
 
-export function PortfolioPage() {
+export function PortfolioPage({ heroOnly = false }: { heroOnly?: boolean }) {
   const root = useRef<HTMLDivElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
   const [menu, setMenu] = useState(false);
@@ -38,16 +40,8 @@ export function PortfolioPage() {
   const openingRemaining = useV2Motion(root);
   const content = portfolioContent;
   return (
-    <div className="portfolio-v2 v2-main-site" ref={root} data-opening="pending">
-      <div className="v2-glass-opening">
-        <div className="v2-glass-shutter shutter-left" aria-hidden="true" />
-        <div className="v2-glass-shutter shutter-right" aria-hidden="true" />
-        <div className="v2-opening-countdown" role="timer" aria-label="网站开启倒计时" aria-live="off">
-          <p className="v2-opening-label">池树孝 · 个人档案</p>
-          <span className="v2-opening-seconds">{String(openingRemaining).padStart(2, "0")}<small>s</small></span>
-          <p className="v2-opening-caption">稍候，影像即将开启</p>
-        </div>
-      </div>
+    <div className={`portfolio-v2 v2-main-site v2-cinematic-site${heroOnly ? " v2-hero-preview" : ""}`} ref={root} data-opening="pending">
+      <HeroOpening remaining={openingRemaining} />
       <a className="skip-link" href="#main">
         跳到主要内容
       </a>
@@ -62,7 +56,7 @@ export function PortfolioPage() {
         <nav className="v2-nav" aria-label="主要导航">
           {navigation.map(([id, label]) => (
             <a
-              href={`#${id}`}
+              href={`${heroOnly ? import.meta.env.BASE_URL : ""}#${id}`}
               key={id}
               aria-current={active === id ? "location" : undefined}
             >
@@ -89,6 +83,7 @@ export function PortfolioPage() {
           open={menu}
           onClose={closeMenu}
           items={navigation}
+          linkBase={heroOnly ? import.meta.env.BASE_URL : ""}
         />
       </header>
       <main id="main">
@@ -139,7 +134,7 @@ export function PortfolioPage() {
             </div>
           </div>
         </section>
-        <section
+        {!heroOnly && <><section
           id="experience"
           className="v2-section v2-experience"
           aria-labelledby="experience-title"
@@ -186,11 +181,12 @@ export function PortfolioPage() {
           suspended={Boolean(selected) || menu}
         />
         <PracticeGallery onView={setSelected} suspended={Boolean(selected) || menu} />
+        </>}
       </main>
-      <footer className="v2-footer v2-container">
+      {!heroOnly && <footer className="v2-footer v2-container">
         <span>个人作品与生活档案</span>
         <a href="#home">回到首页 ↑</a>
-      </footer>
+      </footer>}
       {selected && (
         <MediaViewer
           key={selected.id}

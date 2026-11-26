@@ -13,6 +13,7 @@ type Props = {
   open: boolean;
   onClose: () => void;
   items?: ReadonlyArray<readonly [string, string]>;
+  linkBase?: string;
 };
 
 const focusableSelector = [
@@ -63,7 +64,7 @@ function isolateOutside(dialog: HTMLElement) {
   };
 }
 
-export function MobileMenu({ activeId, open, onClose, items = links }: Props) {
+export function MobileMenu({ activeId, open, onClose, items = links, linkBase = "" }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -133,7 +134,7 @@ export function MobileMenu({ activeId, open, onClose, items = links }: Props) {
         {items.map(([id, label]) => (
           <a
             key={id}
-            href={`#${id}`}
+            href={`${linkBase}#${id}`}
             aria-current={activeId === id ? "location" : undefined}
             onClick={onClose}
           >
